@@ -1,0 +1,142 @@
+<style>
+/* SAIL Navbar Theme Colors */
+.nav-item:hover {
+  color: #ffd54f !important;
+  background-color: transparent !important;
+}
+.active-nav-item {
+  color: #ffd54f !important;
+}
+.social-icon:hover {
+  color: #ffd54f !important;
+}
+.dropdown button:hover {
+  color: #ffd54f !important;
+  background-color: transparent !important;
+}
+.dropdown a:hover {
+  color: #ffd54f !important;
+}
+</style>
+
+<nav class="w-full bg-black border-b border-gray-800 sticky top-0 z-50" style="background: #0a1628 !important;" role="navigation">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-12">
+      <a href="/" class="flex items-center text-xl font-bold text-white transition-colors font-bold" style="color: #ffd54f !important;">GRANT'S FORM</a>
+      
+      <div class="hidden md:flex md:items-center md:space-x-8 hidden md:flex md:items-center md:space-x-4">
+        {{ range .Site.Menus.main }}
+        <a href="{{ .URL }}" class="px-3 py-2 text-sm font-medium rounded-md transition-colors nav-item text-gray-300 hover:bg-gray-800 {{ if $.IsMenuCurrent "main" . }}active-nav-item{{ end }}">{{ .Name }}</a>
+        {{ end }}
+        
+        {{ if .Site.Taxonomies.tags }}
+        <div class="relative dropdown">
+          <button class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md transition-colors flex items-center" onclick="toggleDropdown('tags-dropdown')">
+            Tags <span class="ml-1">▼</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg hidden" id="tags-dropdown">
+            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+            <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">{{ $name | title }}</a>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+        
+        <div class="relative dropdown">
+          <button class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md transition-colors flex items-center" onclick="toggleDropdown('sub-dropdown')">
+            Sub <span class="ml-1">▼</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-32 bg-gray-800 border border-gray-700 rounded-md shadow-lg hidden" id="sub-dropdown">
+            <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" href="/posts/index.xml">Posts RSS</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hidden md:flex md:items-center md:space-x-4">
+        <a class="text-gray-300 transition-colors p-2 social-icon" href="https://github.com/grantsform" target="_blank" title="GitHub">
+          <i class="fab fa-github fa-lg"></i>
+        </a>
+        <a class="text-gray-300 transition-colors p-2 social-icon" href="https://github.com/sponsors/grantsform" target="_blank" title="Sponsor">
+          <i class="fas fa-heart fa-lg"></i>
+        </a>
+      </div>
+      
+      <button class="md:hidden p-2 text-gray-300 transition-colors social-icon" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div class="md:hidden border-t border-gray-700 hidden" id="mobile-menu">
+    <div class="px-4 py-2 space-y-1">
+      {{ range .Site.Menus.main }}
+      <a class="block px-3 py-2 text-gray-300 rounded-md transition-colors nav-item {{ if $.IsMenuCurrent "main" . }}active-nav-item bg-gray-800{{ end }}" href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+      
+      {{ if .Site.Taxonomies.tags }}
+      <div class="pt-2 border-t border-gray-700 mt-2">
+        <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tags</p>
+        {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+        <a class="block px-3 py-2 text-sm text-gray-400 rounded-md transition-colors nav-item" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">{{ $name | title }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+      
+      <div class="pt-2 border-t border-gray-700 mt-2">
+        <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Subscribe</p>
+        <a class="block px-3 py-2 text-sm text-gray-400 rounded-md transition-colors nav-item" href="/posts/index.xml">Posts RSS</a>
+      </div>
+      
+      <div class="pt-2 border-t border-gray-700 mt-2 flex space-x-4 px-3 py-2">
+        <a class="text-gray-400 hover:text-yellow-400 transition-colors" href="https://github.com/grantsform" target="_blank" title="GitHub">
+          <i class="fab fa-github fa-lg"></i>
+        </a>
+        <a class="text-gray-400 hover:text-yellow-400 transition-colors" href="https://github.com/sponsors/grantsform" target="_blank" title="Sponsor">
+          <i class="fas fa-heart fa-lg"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+function toggleDropdown(dropdownId) {
+  const dropdown = document.getElementById(dropdownId);
+  const allDropdowns = document.querySelectorAll('.dropdown > div:last-child');
+
+  // Close all other dropdowns
+  allDropdowns.forEach(d => {
+    if (d.id !== dropdownId) {
+      d.classList.add('hidden');
+    }
+  });
+
+  // Toggle current dropdown
+  dropdown.classList.toggle('hidden');
+}
+
+function toggleMobileMenu() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileMenu.classList.toggle('hidden');
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdowns = document.querySelectorAll('.dropdown');
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.contains(event.target)) {
+      const dropdownMenu = dropdown.querySelector('div:last-child');
+      dropdownMenu.classList.add('hidden');
+    }
+  });
+});
+
+// Close mobile menu when window is resized to desktop
+window.addEventListener('resize', function() {
+  if (window.innerWidth >= 768) {
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenu.classList.add('hidden');
+  }
+});
+</script>

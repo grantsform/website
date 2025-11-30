@@ -1,0 +1,246 @@
+<style>
+.featured-series-flex { display: flex; gap: 2rem; align-items: stretch; position: relative; padding: 0.75rem; }
+.featured-series-card { flex: 3 1 0; background: linear-gradient(180deg, #0d2137, #1a3a5c); color: #e0f0ff; padding: 1rem; border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); border: 1px solid rgba(33, 150, 243, 0.3); display: flex; flex-direction: column; min-height: 320px; max-height: 400px; transition: box-shadow 0.2s; position: relative; z-index: 1; overflow: hidden; }
+.featured-series-card h3 { margin-top: 0; color: #64b5f6; flex-shrink: 0; }
+.featured-series-card > p { flex-shrink: 0; color: rgba(224, 240, 255, 0.7); }
+.featured-series-card ul { flex: 1; overflow-y: auto; margin: 0; padding: 0; list-style: none; scrollbar-width: thin; scrollbar-color: #2196f3 transparent; }
+.featured-series-card ul::-webkit-scrollbar { width: 6px; }
+.featured-series-card ul::-webkit-scrollbar-thumb { background: #2196f3; border-radius: 3px; }
+.featured-series-card ul::-webkit-scrollbar-track { background: transparent; }
+.featured-series-card li { padding: 0.25rem 0; border-bottom: 1px solid rgba(33,150,243,0.2); }
+.featured-series-card li:last-child { border-bottom: none; }
+.featured-series-card li a { color: #e0f0ff; text-decoration: none; }
+.featured-series-card li a:hover { color: #ffd54f; }
+.featured-series-tabs { flex: 1 1 0; display: flex; flex-direction: column; gap: 0.5rem; justify-content: flex-start; position: relative; z-index: 1; max-height: 400px; }
+.series-tab { background: linear-gradient(180deg, #0d2137, #1a3a5c); color: #e0f0ff; border: none; border-radius: 6px; padding: 0.8rem 1rem; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.18s, color 0.18s; border: 1px solid rgba(33,150,243,0.2); }
+.series-tab:hover { background: rgba(33,150,243,0.2); color: #64b5f6; }
+.series-tab.active { background: #2196f3; color: #ffffff; font-weight: bold; }
+.featured-series-flex::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,33,55,0.95), rgba(26,58,92,0.92)); border-radius: 12px; z-index: 0; pointer-events: none; box-shadow: 0 12px 40px rgba(0,0,0,0.4); border: 1px solid rgba(33,150,243,0.3); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.featured-series { margin: 2rem 0; }
+
+/* Mobile responsive layout */
+@media (max-width: 767px) {
+  .featured-series-flex { flex-direction: column; gap: 1rem; }
+  .featured-series-tabs { flex: 0 0 auto; flex-direction: row; overflow-x: auto; max-height: none; gap: 0.25rem; padding: 0.5rem; scrollbar-width: thin; scrollbar-color: #2196f3 transparent; }
+  .featured-series-tabs::-webkit-scrollbar { height: 4px; }
+  .featured-series-tabs::-webkit-scrollbar-thumb { background: #2196f3; border-radius: 2px; }
+  .featured-series-tabs::-webkit-scrollbar-track { background: transparent; }
+  .series-tab { flex-shrink: 0; white-space: nowrap; padding: 0.6rem 0.8rem; font-size: 0.9rem; }
+  .featured-series-card { flex: none; min-height: 280px; }
+}
+</style>
+
+<section id="featured-series" class="featured-series">
+  <div class="container">
+    <h2 style="color: #ffd54f;">Featured Series</h2>
+    <p style="color: #e8d4bc;">A series is a collection of posts, such as guides, tutorials, or themed articles. Explore our curated series below.</p>
+    <div class="featured-series-flex">
+      <div class="featured-series-card" id="series-card">
+        {{- $firstKey := "" }}
+        {{- $firstSeries := "" }}
+        {{- range $key, $series := .Site.Data.series }}
+          {{- if eq $firstKey "" }}
+            {{- $firstKey = $key }}
+            {{- $firstSeries = $series }}
+          {{- end }}
+        {{- end }}
+        {{- if $firstSeries }}
+        <h3>{{ $firstSeries.title }}</h3>
+        <p>{{ $firstSeries.desc }}</p>
+        <ul>
+          {{- range $firstSeries.posts }}
+          <li><i class="fas fa-link"></i> <a href="{{ .url }}">{{ .title }}</a></li>
+          {{- end }}
+        </ul>
+        {{- end }}
+      </div>
+      <div class="featured-series-tabs">
+        {{- $index := 0 }}
+        {{- range $key, $series := .Site.Data.series }}
+        <button class="series-tab{{ if eq $index 0 }} active{{ end }}" 
+                data-series="{{ $key }}"
+                data-index="{{ $index }}">
+          {{ $series.title }}
+        </button>
+        {{- $index = add $index 1 }}
+        {{- end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Store series data for JavaScript tab switching -->
+<script type="application/json" id="series-data">
+{
+{{- $first := true -}}
+{{- range $key, $series := .Site.Data.series -}}
+{{- if not $first }},{{ end -}}
+"{{ $key }}": {
+  "title": {{ $series.title | jsonify }},
+  "desc": {{ $series.desc | jsonify }},
+  "posts": [
+    {{- $postFirst := true -}}
+    {{- range $series.posts -}}
+    {{- if not $postFirst }},{{ end -}}
+    {
+      "title": {{ .title | jsonify }},
+      "url": {{ .url | jsonify }}
+    }
+    {{- $postFirst = false -}}
+    {{- end -}}
+  ]
+}
+{{- $first = false -}}
+{{- end -}}
+}
+</script>
+
+<script>
+// Simplified series tab switching
+var seriesData = null;
+var carouselInterval = null;
+var currentSeriesIndex = 0;
+var seriesKeys = [];
+
+function loadSeriesData() {
+  var script = document.getElementById('series-data');
+  if (!script) {
+    console.error('Featured Series: series-data script element not found');
+    return false;
+  }
+  
+  try {
+    const textContent = script.textContent.trim();
+    if (!textContent) {
+      console.error('Featured Series: series-data script element is empty');
+      return false;
+    }
+    
+    console.log('Featured Series: Raw JSON text:', textContent);
+    
+    seriesData = JSON.parse(textContent);
+    seriesKeys = Object.keys(seriesData);
+    console.log('Featured Series: Successfully parsed series data:', seriesData);
+    console.log('Featured Series: Data type:', typeof seriesData);
+    console.log('Featured Series: Is array:', Array.isArray(seriesData));
+    console.log('Featured Series: Series keys:', seriesKeys);
+    return true;
+  } catch (e) {
+    console.error('Featured Series: Failed to parse JSON:', e);
+    seriesData = {};
+    return false;
+  }
+}
+
+function renderSeriesCard(seriesKey) {
+  console.log('Featured Series: Rendering card for series:', seriesKey);
+  
+  const s = seriesData[seriesKey];
+  if (!s) {
+    console.error('Featured Series: Series not found:', seriesKey);
+    return;
+  }
+  
+  const card = document.getElementById('series-card');
+  if (!card) {
+    console.error('Featured Series: series-card element not found');
+    return;
+  }
+  
+  console.log('Featured Series: Rendering series:', s.title);
+  console.log('Featured Series: Posts data:', s.posts);
+  console.log('Featured Series: Posts type:', typeof s.posts);
+  console.log('Featured Series: Posts is array:', Array.isArray(s.posts));
+  
+  // Handle case where posts might not be an array
+  const posts = Array.isArray(s.posts) ? s.posts : [];
+  
+  card.innerHTML = `
+    <h3>${s.title}</h3>
+    <p>${s.desc}</p>
+    <ul>
+      ${posts.map(post => `<li><i class="fas fa-link"></i> <a href="${post.url}">${post.title}</a></li>`).join('')}
+    </ul>
+  `;
+}
+
+function setActiveTab(targetIndex) {
+  document.querySelectorAll('.series-tab').forEach((tab, index) => {
+    tab.classList.toggle('active', index === targetIndex);
+  });
+  currentSeriesIndex = targetIndex;
+}
+
+function startCarousel() {
+  if (seriesKeys.length <= 1) return; // No point in carousel with only one item
+  
+  carouselInterval = setInterval(() => {
+    currentSeriesIndex = (currentSeriesIndex + 1) % seriesKeys.length;
+    const seriesKey = seriesKeys[currentSeriesIndex];
+    
+    console.log('Featured Series: Auto-cycling to', currentSeriesIndex, seriesKey);
+    
+    setActiveTab(currentSeriesIndex);
+    renderSeriesCard(seriesKey);
+  }, 30000); // 30 seconds
+}
+
+function stopCarousel() {
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+    carouselInterval = null;
+    console.log('Featured Series: Carousel stopped');
+  }
+}
+
+function restartCarousel() {
+  stopCarousel();
+  setTimeout(startCarousel, 30000); // Restart after 30 seconds of inactivity
+}
+
+// Initialize tab switching
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Featured Series: DOMContentLoaded');
+  
+  if (!loadSeriesData()) {
+    console.error('Featured Series: Failed to load series data');
+    return;
+  }
+  
+  console.log('Featured Series: Series data loaded:', seriesData);
+  
+  // Debug: Check what tabs exist
+  const tabs = document.querySelectorAll('.series-tab');
+  console.log('Featured Series: Found tabs:', tabs.length);
+  tabs.forEach((tab, index) => {
+    console.log(`Tab ${index}: ${tab.textContent.trim()} -> ${tab.getAttribute('data-series')}`);
+  });
+  
+  // Add click handlers to existing tabs
+  tabs.forEach((tab, index) => {
+    console.log('Featured Series: Adding click handler to tab', index, tab.getAttribute('data-series'));
+    
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Featured Series: Tab clicked', index, tab.getAttribute('data-series'));
+      
+      const seriesKey = tab.getAttribute('data-series');
+      console.log('Featured Series: Looking for series key:', seriesKey);
+      console.log('Featured Series: Available keys:', Object.keys(seriesData));
+      
+      // Stop carousel when user interacts
+      stopCarousel();
+      
+      setActiveTab(index);
+      renderSeriesCard(seriesKey);
+      
+      // Restart carousel after user interaction
+      restartCarousel();
+    });
+  });
+  
+  // Start the automatic carousel
+  console.log('Featured Series: Starting carousel with', seriesKeys.length, 'items');
+  startCarousel();
+});
+</script>

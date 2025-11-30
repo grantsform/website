@@ -1,0 +1,35 @@
+{{ define "main" }}
+<style>
+.tags-index { position: relative; z-index: 10; }
+.tags-index h1 { color: #ffd54f; }
+.tags-index .lead { color: #e0f7fa; }
+.tags-index .btn-outline-primary { background: transparent; border: 1px solid rgba(33,150,243,0.5); color: #64b5f6; }
+.tags-index .btn-outline-primary:hover { background: rgba(33,150,243,0.2); border-color: #4dd0e1; color: #4dd0e1; }
+.tags-index .badge.bg-secondary { background: rgba(255,213,79,0.3) !important; color: #ffd54f; }
+.tags-index p { color: #e0f7fa; }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 tags-index">
+  <div class="row">
+    <div class="col-12">
+      <header class="mb-4">
+        <h1>Tags</h1>
+        <p class="lead">Browse posts by tag</p>
+      </header>
+      
+      {{- if .Data.Terms }}
+      <div class="row">
+        {{- range .Data.Terms.ByCount }}
+        <div class="col-auto mb-2">
+          <a href="{{ .Page.RelPermalink }}" class="btn btn-outline-primary">
+            {{ .Page.Title }} <span class="badge bg-secondary">{{ .Count }}</span>
+          </a>
+        </div>
+        {{- end }}
+      </div>
+      {{- else }}
+      <p>No tags found.</p>
+      {{- end }}
+    </div>
+  </div>
+</div>
+{{ end }}

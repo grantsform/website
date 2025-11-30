@@ -1,0 +1,28 @@
+<style>
+.support { position: relative; z-index: 5; }
+.support-card { background: linear-gradient(180deg, #0d2137, #1a3a5c); padding: 1.5rem; border-radius: 8px; color: #e0f0ff; border: 1px solid rgba(33, 150, 243, 0.3); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); }
+.support-card h3 { color: #64b5f6; margin-top: 0; }
+.support-card p { color: rgba(224, 240, 255, 0.85); }
+.btn-outline { background: white; color: #2196f3; border: 1px solid #2196f3; padding: 0.375rem 0.75rem; border-radius: 0.25rem; text-decoration: none; display: inline-block; }
+.badge { border: 1px solid #2196f3; border-radius: 0.125rem; text-decoration: none; display: inline-block; overflow: hidden; margin: 0 0.125rem 0 0; font-size: 0.8rem; }
+.btn-part { display: inline-block; padding: 0.125rem 0.25rem; }
+.white-part { background: white; color: #2196f3; }
+.blue-part { background: #2196f3; color: white; }
+</style>
+
+{{- if .Site.Params.support }}
+<section class="support">
+  <div class="support-card">
+    <h3>{{ .Site.Params.support.title | default "Support Grantsform" }}</h3>
+    <p>{{ .Site.Params.support.description | default "..." }}</p>
+    <p>
+      {{ range .Site.Params.support.buttons }}
+      <a class="badge" href="{{ .url }}">
+        <span class="btn-part white-part">{{ .prefix }}</span>
+        <span class="btn-part blue-part">{{ .suffix }}</span>
+      </a>
+      {{ end }}
+    </p>
+  </div>
+</section>
+{{- end }}

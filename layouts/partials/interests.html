@@ -1,0 +1,334 @@
+<style>
+.skills-container { background: linear-gradient(180deg, #0a1628, #1e3a5f); color: #e0e0e0; padding: 2rem; border-radius: 1rem; position: relative; overflow: hidden; margin: 2rem 0; }
+.skills-container::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top, rgba(33,150,243,0.15), transparent 55%); pointer-events: none; }
+.skills-grid { display: grid; gap: 2rem; grid-template-columns: 1fr 1fr; position: relative; z-index: 1; }
+
+/* Responsive grid - stack on smaller screens */
+@media (max-width: 1024px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+.skills-card { background: rgba(30, 58, 95, 0.6); border: 1px solid rgba(33,150,243,0.3); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(8px); overflow: hidden; }
+.section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: #64b5f6; margin-bottom: 0.5rem; }
+.card-title { font-size: 1.875rem; font-weight: 600; color: #ffffff; line-height: 1.2; margin-bottom: 1.5rem; word-wrap: break-word; overflow-wrap: break-word; }
+.skills-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+.skill-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.skill-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; }
+.skill-name { color: #e0e0e0; }
+.skill-name[data-url] { cursor: pointer; text-decoration: underline; text-decoration-color: transparent; transition: color 140ms ease, text-decoration-color 140ms ease; }
+.skill-name[data-url]:hover { color: #ffd54f; text-decoration-color: #ffd54f; }
+.skill-percent { color: #ffd54f; font-weight: bold; }
+.skill-meter { height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; position: relative; overflow: hidden; cursor: inherit; transition: background 0.2s ease; }
+.skill-fill { height: 100%; background: #ffd54f; border-radius: 2px; transition: width 0.6s ease-out; }
+.toolbelt-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tool-badge { background: rgba(33,150,243,0.2); color: #64b5f6; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; text-decoration: none; white-space: nowrap; border: 1px solid rgba(33,150,243,0.3); }
+.skill-item[data-url] { cursor: pointer; padding: 0.25rem; margin: -0.25rem; border-radius: 4px; transition: background 0.2s ease; }
+.skill-item[data-url]:hover { background: rgba(255,213,79,0.1); }
+.skill-item[data-url]:hover .skill-meter { background: rgba(255,213,79,0.3); }
+.tool-badge:hover { background: rgba(255,213,79,0.2); color: #ffd54f; text-decoration: none; border-color: rgba(255,213,79,0.4); }
+.radar-container { height: 456px; display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 100%; overflow: hidden; }
+.radar-container svg { max-width: 100%; height: auto; }
+.skill-tooltip-global { position: absolute; z-index: 1000; background: #1e3a5f; color: #e0e0e0; padding: 0.8em 1em; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); border: 1px solid rgba(33,150,243,0.3); max-width: 300px; font-size: 0.9em; line-height: 1.4; display: none; pointer-events: none; }
+.interests-section { margin-top: 3rem; }
+.interests-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: 2rem; }
+.interest-card { background: rgba(30, 58, 95, 0.6); border: 1px solid rgba(33,150,243,0.3); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; backdrop-filter: blur(8px); }
+.interest-title { display: flex; align-items: center; gap: 0.5rem; color: #ffffff; font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
+.interest-icon { color: #ffd54f; width: 1rem; height: 1rem; }
+.interest-desc { color: #b0bec5; font-size: 0.875rem; margin-bottom: 1rem; }
+.interest-detail { color: rgba(224,224,224,0.7); font-size: 0.875rem; line-height: 1.6; margin-top: auto; }
+
+/* Small screen responsive adjustments */
+@media (max-width: 576px) {
+  .skills-container { padding: 1rem; }
+  .skills-card { padding: 1rem; }
+  .card-title { font-size: 1.25rem; }
+  .radar-container { height: auto; min-height: 280px; }
+  .interests-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="skills-container">
+  <div style="margin-bottom: 2rem;">
+    <h3 style="color: #ffd54f; margin-bottom: 1rem;">Interests & Skills</h3>
+  </div>
+  
+  <div class="skills-grid">
+    <div class="skills-card">
+      <div class="section-title">Bars & Bricks</div>
+      <h2 class="card-title">Programming-Languages, Tech-Stacks, And Platforms.</h2>
+      
+      <div class="skills-list">
+        {{ range .Site.Data.interests.coreSkills }}
+        {{ $familiarityLevel := "" }}
+        {{ if lt .level 20 }}
+          {{ $familiarityLevel = "Barely Familiar" }}
+        {{ else if lt .level 40 }}
+          {{ $familiarityLevel = "Little Familiar" }}
+        {{ else if lt .level 60 }}
+          {{ $familiarityLevel = "Somewhat Familiar" }}
+        {{ else if lt .level 80 }}
+          {{ $familiarityLevel = "Pretty Familiar" }}
+        {{ else }}
+          {{ $familiarityLevel = "Very Familiar" }}
+        {{ end }}
+        <div class="skill-item" data-skill-tooltip="{{ .level }}% {{ $familiarityLevel }}"{{ if .url }} data-url="{{ .url }}"{{ end }}>
+          <div class="skill-header">
+            <span class="skill-name"{{ if .url }} data-url="{{ .url }}"{{ end }}>{{ .name }}</span>
+            <span class="skill-percent">{{ .level }}%</span>
+          </div>
+          <div class="skill-meter">
+            <div class="skill-fill" style="width: 0%" data-width="{{ .level }}%"></div>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+      
+      <div class="section-title" style="margin-top: 2rem;">Toolbelt</div>
+      <div class="toolbelt-grid">
+        {{ range .Site.Data.interests.toolbelt }}
+          {{ if .url }}
+          <a href="{{ .url }}" target="_blank" class="tool-badge">{{ .name }}</a>
+          {{ else }}
+          <span class="tool-badge">{{ .name }}</span>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+    
+    <div class="skills-card">
+      <div class="section-title">Heat Map</div>
+      <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="color: #2e7d32;"></span> Breadth Radar
+      </h3>
+      <div class="radar-container" id="radar-container">
+        <!-- Radar chart will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+  
+  <div class="interests-section">
+    <div class="section-title">Focusing On</div>
+    <div class="interests-grid">
+      {{ range .Site.Data.interests.interests }}
+      <div class="interest-card">
+        <div class="interest-title">
+          <span class="interest-icon">{{ .icon }}</span>
+          <span>{{ .label }}</span>
+        </div>
+        <div class="interest-desc">{{ .desc }}</div>
+        <div class="interest-detail">{{ .detail }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<!-- Store radar data in a data attribute for JavaScript -->
+<div id="radar-data" style="display: none;" data-radar="{{ .Site.Data.interests.radarData | jsonify }}"></div>
+
+<script>
+// Get radar data from HTML data attribute
+function getRadarData() {
+  const dataElement = document.getElementById('radar-data');
+  if (dataElement) {
+    const radarDataStr = dataElement.getAttribute('data-radar');
+    try {
+      return JSON.parse(radarDataStr);
+    } catch (e) {
+      console.error('Failed to parse radar data:', e);
+      return [];
+    }
+  }
+  return [];
+}
+
+var radarData = getRadarData();
+
+// Simple radar chart implementation
+function createRadarChart() {
+  const container = document.getElementById('radar-container');
+  if (!container) return;
+  
+  // Clear any existing chart
+  container.innerHTML = '';
+  
+  const radarData = getRadarData();
+  if (!radarData || radarData.length === 0) return;
+  
+  // Use viewBox for responsive scaling
+  const size = 480;
+  const center = size / 2;
+  const radius = size * 0.35;
+  
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  svg.style.display = 'block';
+  svg.style.width = '100%';
+  svg.style.maxWidth = size + 'px';
+  svg.style.height = 'auto';
+  svg.style.margin = '0 auto';
+  
+  // Background circle
+  const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bgCircle.setAttribute('cx', center);
+  bgCircle.setAttribute('cy', center);
+  bgCircle.setAttribute('r', radius);
+  bgCircle.setAttribute('fill', 'none');
+  bgCircle.setAttribute('stroke', 'rgba(77, 208, 225, 0.3)');
+  bgCircle.setAttribute('stroke-width', '1');
+  svg.appendChild(bgCircle);
+  
+  // Grid lines
+  for (let i = 1; i <= 3; i++) {
+    const gridCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    gridCircle.setAttribute('cx', center);
+    gridCircle.setAttribute('cy', center);
+    gridCircle.setAttribute('r', radius * (i / 3));
+    gridCircle.setAttribute('fill', 'none');
+    gridCircle.setAttribute('stroke', 'rgba(77, 208, 225, 0.2)');
+    gridCircle.setAttribute('stroke-width', '0.5');
+    svg.appendChild(gridCircle);
+  }
+  
+  // Axes and labels
+  radarData.forEach(item => {
+    const angle = (item.angle - 90) * Math.PI / 180;
+    const x2 = center + radius * Math.cos(angle);
+    const y2 = center + radius * Math.sin(angle);
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', center);
+    line.setAttribute('y1', center);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', 'rgba(77, 208, 225, 0.3)');
+    line.setAttribute('stroke-width', '0.5');
+    svg.appendChild(line);
+    
+    const labelRadius = radius + 20;
+    const labelX = center + labelRadius * Math.cos(angle);
+    const labelY = center + labelRadius * Math.sin(angle);
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', labelX);
+    text.setAttribute('y', labelY);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('fill', '#e0f7fa');
+    text.setAttribute('font-size', '11');
+    text.setAttribute('font-family', 'system-ui, sans-serif');
+    text.textContent = item.subject;
+    svg.appendChild(text);
+  });
+  
+  // Data polygon
+  const points = radarData.map(item => {
+    const angle = (item.angle - 90) * Math.PI / 180;
+    const distance = radius * (item.value / 100);
+    const x = center + distance * Math.cos(angle);
+    const y = center + distance * Math.sin(angle);
+    return x + ',' + y;
+  }).join(' ');
+  
+  const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  polygon.setAttribute('points', points);
+  polygon.setAttribute('fill', 'rgba(33, 150, 243, 0.3)');
+  polygon.setAttribute('stroke', '#4dd0e1');
+  polygon.setAttribute('stroke-width', '2');
+  svg.appendChild(polygon);
+  
+  // Data points
+  radarData.forEach(item => {
+    const angle = (item.angle - 90) * Math.PI / 180;
+    const distance = radius * (item.value / 100);
+    const x = center + distance * Math.cos(angle);
+    const y = center + distance * Math.sin(angle);
+    
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
+    circle.setAttribute('r', '3');
+    circle.setAttribute('fill', '#4dd0e1');
+    svg.appendChild(circle);
+  });
+  
+  container.appendChild(svg);
+}
+
+// Animate skill bars
+function animateSkillBars() {
+  setTimeout(() => {
+    document.querySelectorAll('.skill-fill').forEach(fill => {
+      fill.style.width = fill.dataset.width;
+    });
+  }, 100);
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Interests: DOMContentLoaded');
+  const radarData = getRadarData();
+  console.log('Interests: Radar data loaded:', radarData);
+  createRadarChart();
+  animateSkillBars();
+  
+  // Custom tooltip functionality for skills (similar to relevant repos)
+  const globalSkillTT = document.createElement('div');
+  globalSkillTT.className = 'skill-tooltip-global';
+  globalSkillTT.id = 'skill-tooltip-global';
+  globalSkillTT.setAttribute('role','tooltip');
+  document.body.appendChild(globalSkillTT);
+  
+  function clampPosition(x,y,tooltip){
+    var tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+    var pad = 8;
+    var maxX = window.scrollX + window.innerWidth - tw - pad;
+    var maxY = window.scrollY + window.innerHeight - th - pad;
+    var nx = Math.min(maxX, Math.max(window.scrollX + pad, x));
+    var ny = Math.min(maxY, Math.max(window.scrollY + pad, y));
+    return {x: nx, y: ny};
+  }
+  
+  var skillPointerShownFor = null;
+  
+  document.addEventListener('mouseover', function(e){
+    var skillItem = e.target.closest('.skill-item');
+    if (!skillItem) return;
+    var tooltipText = skillItem.dataset.skillTooltip;
+    if (!tooltipText) return;
+    globalSkillTT.innerHTML = tooltipText;
+    globalSkillTT.style.display = 'block';
+    skillPointerShownFor = skillItem;
+    var pos = clampPosition(e.pageX + 12, e.pageY + 12, globalSkillTT);
+    globalSkillTT.style.left = pos.x + 'px'; 
+    globalSkillTT.style.top = pos.y + 'px';
+  });
+  
+  document.addEventListener('mousemove', function(e){ 
+    if (globalSkillTT.style.display === 'block') { 
+      var pos = clampPosition(e.pageX + 12, e.pageY + 12, globalSkillTT); 
+      globalSkillTT.style.left = pos.x + 'px'; 
+      globalSkillTT.style.top = pos.y + 'px'; 
+    } 
+  });
+  
+  document.addEventListener('mouseout', function(e){
+    var related = e.relatedTarget;
+    if (!related || !related.closest || !related.closest('.skill-item')) {
+      globalSkillTT.style.display = 'none'; 
+      skillPointerShownFor = null;
+    }
+  });
+  
+  // Handle clicks on skill items
+  document.addEventListener('click', function(e){
+    var skillItem = e.target.closest('.skill-item[data-url]');
+    if (skillItem) {
+      var url = skillItem.dataset.url;
+      if (url) {
+        window.open(url, '_blank');
+      }
+    }
+  });
+});
+</script>

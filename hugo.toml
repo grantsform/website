@@ -1,0 +1,137 @@
+baseURL = 'https://grantsform.github.io/'
+languageCode = 'en-us'
+title = "GRANT'S FORM - Dilutions Of Grant'ur"
+publishDir = "../grantsform.github.io"
+
+
+[params]
+  description = "GRANT'S FORM - Dilutions Of Grant'eur."
+  author = "Joshua Steven Grant (ie: Jost Grant)"
+  keywords = "LISP, Godot, Devlog, Life"
+  
+  # Featured Video Configuration
+  [params.featuredVideo]
+    title = "Intro Vid"
+    placeholder = "[ P L A C E H O L D E R ]"
+    embedUrl = "https://www.youtube.com/embed/bmpz3-3x9a4?autoplay=1&controls=0&mute=1&rel=0&modestbranding=1&showinfo=0"
+  
+  # Support Configuration
+  [params.support]
+    title = "Support Grantsform"
+    description = "Interested / Excited What We're Doing Here?"
+    subscribeUrl = "https://github.com/sponsors/grantsform"
+    
+    [[params.support.buttons]]
+      prefix = "Follow Grant:"
+      suffix = "X.com"
+      url = "https://x.com/grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Watch Grant:"
+      suffix = "Youtube"
+      url = "https://youtube.com/@grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Stream Grant:"
+      suffix = "Twitch"
+      url = "https://twitch.tv/grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Talk2 Grant:"
+      suffix = "Discord"
+      url = "https://discord.gg/@"
+    
+    [[params.support.buttons]]
+      prefix = "Fork Grant:"
+      suffix = "GitHub"
+      url = "https://github.com/grantsform"
+    
+    [[params.support.buttons]]
+      prefix = "Fund Grant:"
+      suffix = "Patreon"
+      url = "https://patreon.com/grantsform"
+  
+  # Featured Projects
+  [[params.featuredProjects]]
+    title = "CheatNodes"
+    description = "Λn In-Instance Editor And Tooling For Godot."
+    url = "https://github.com/cheatnodes"
+    buttonText = "Go!"
+    image = "/proj-cheatnodes.webp"
+  
+  [[params.featuredProjects]]
+    title = "GDmod"
+    description = "Λ XR Scriptable Physics Sandbox."
+    url = "https://github.com/gdmod"
+    buttonText = "Go!"
+    image = "/proj-gdmod.webp"
+  
+  # Also Working On Projects
+  [[params.alsoWorkingOn]]
+    title = "Godot 'Gato"
+    description = "Λ Neko Themed AI Assistant / Desktop Companion Built-Into And Built-For Godot."
+    url = "https://github.com/godot-gato"
+    buttonText = "Go!"
+    image = "/proj-godot-gato.webp"
+  
+  [[params.alsoWorkingOn]]
+    title = "UF-OS"
+    description = "Λ Bootc-Based ArchLinux Distro Aimed At Driving Godot Towards Spatial Computing."
+    url = "https://github.com/uf-os"
+    buttonText = "Go!"
+    image = "/proj-uf-os.webp"
+  
+  [[params.alsoWorkingOn]]
+    title = "GateLinux"
+    description = "Λ Solid Steel, Build-Time ArchLinux Image Factory And Related Ecosystem."
+    url = "https://github.com/gatelinux"
+    buttonText = "Go!"
+    image = "/proj-gatelinux.webp"
+  
+  [[params.alsoWorkingOn]]
+    title = "Godot-Lisp"
+    description = "Λ Custom LISP Implementation x Tooling (Editor Support, Etc) For The Godot Game Engine."
+    url = "https://github.com/godot-lisp"
+    buttonText = "Go!"
+    image = "/proj-godot-lisp.webp"
+  
+[menu]
+  [[menu.main]]
+    name = "Canon"
+    url = "/canon/"
+    weight = 1
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+  [[menu.main]]
+    name = "Projects"
+    url = "/projects/"
+    weight = 3
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 4
+  [[menu.main]]
+    name = "Series"
+    url = "/series/"
+    weight = 5
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "github-dark"
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+

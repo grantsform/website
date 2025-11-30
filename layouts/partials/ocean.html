@@ -1,0 +1,163 @@
+<!-- Global ocean wave effect for all pages (CSS-only waves for better performance) -->
+<style>
+#ocean-canvas-wrap { 
+  position: fixed; 
+  inset: 0; 
+  z-index: -1; 
+  pointer-events: none; 
+  background: linear-gradient(180deg, #0a1628 0%, #1e3a5f 40%, #2196f3 70%, #64b5f6 100%);
+  overflow: hidden;
+}
+
+/* CSS Wave layers - GPU accelerated */
+.wave {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  transform-origin: center bottom;
+}
+
+.wave1 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 85%, rgba(33, 150, 243, 0.15) 85%, rgba(33, 150, 243, 0.15) 100%);
+  animation: wave-drift 25s linear infinite;
+  opacity: 0.8;
+}
+
+.wave2 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 75%, rgba(30, 136, 229, 0.2) 75%, rgba(30, 136, 229, 0.2) 100%);
+  animation: wave-drift 20s linear infinite reverse;
+  opacity: 0.7;
+}
+
+.wave3 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 65%, rgba(25, 118, 210, 0.25) 65%, rgba(25, 118, 210, 0.25) 100%);
+  animation: wave-drift 18s linear infinite;
+  opacity: 0.8;
+}
+
+.wave4 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(21, 101, 192, 0.3) 55%, rgba(21, 101, 192, 0.3) 100%);
+  animation: wave-drift 22s linear infinite reverse;
+  opacity: 0.7;
+}
+
+.wave5 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 45%, rgba(33, 150, 243, 0.2) 45%, rgba(33, 150, 243, 0.2) 100%);
+  animation: wave-drift 28s linear infinite;
+  opacity: 0.6;
+}
+
+.wave6 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(30, 136, 229, 0.15) 35%, rgba(30, 136, 229, 0.15) 100%);
+  animation: wave-drift 32s linear infinite reverse;
+  opacity: 0.5;
+}
+
+.wave7 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 25%, rgba(25, 118, 210, 0.1) 25%, rgba(25, 118, 210, 0.1) 100%);
+  animation: wave-drift 35s linear infinite;
+  opacity: 0.4;
+}
+
+.wave8 {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(33, 150, 243, 0.08) 15%, rgba(33, 150, 243, 0.08) 100%);
+  animation: wave-drift 40s linear infinite reverse;
+  opacity: 0.3;
+}
+
+/* SVG wave overlays for actual wave shape */
+.svg-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.svg-wave {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  bottom: 0;
+}
+
+.svg-wave svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.svg-wave1 { animation: wave-drift 12s linear infinite; bottom: 0; }
+.svg-wave2 { animation: wave-drift 15s linear infinite reverse; bottom: 5%; }
+.svg-wave3 { animation: wave-drift 18s linear infinite; bottom: 12%; }
+.svg-wave4 { animation: wave-drift 22s linear infinite reverse; bottom: 20%; }
+.svg-wave5 { animation: wave-drift 26s linear infinite; bottom: 30%; }
+.svg-wave6 { animation: wave-drift 30s linear infinite reverse; bottom: 42%; }
+.svg-wave7 { animation: wave-drift 35s linear infinite; bottom: 55%; }
+.svg-wave8 { animation: wave-drift 40s linear infinite reverse; bottom: 70%; }
+
+@keyframes wave-drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .wave, .svg-wave { animation: none; }
+}
+</style>
+
+<div id="ocean-canvas-wrap" aria-hidden="true">
+  <div class="svg-waves">
+    <div class="svg-wave svg-wave8">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(33, 150, 243, 0.06)" d="M0,50 C360,100 720,0 1080,50 C1260,75 1440,50 1440,50 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave7">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(30, 136, 229, 0.08)" d="M0,60 C320,20 640,80 960,40 C1200,10 1440,60 1440,60 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave6">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(25, 118, 210, 0.1)" d="M0,40 C240,80 480,20 720,60 C960,100 1200,40 1440,40 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave5">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(21, 101, 192, 0.15)" d="M0,70 C180,30 360,90 540,50 C720,10 900,70 1080,30 C1260,0 1440,70 1440,70 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave4">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(33, 150, 243, 0.2)" d="M0,50 C288,90 576,10 864,50 C1152,90 1440,50 1440,50 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave3">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(30, 136, 229, 0.25)" d="M0,30 C360,70 720,10 1080,50 C1260,70 1440,30 1440,30 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave2">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(25, 118, 210, 0.35)" d="M0,60 C240,20 480,80 720,40 C960,0 1200,60 1440,60 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+    <div class="svg-wave svg-wave1">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(13, 71, 161, 0.5)" d="M0,40 C360,80 720,20 1080,60 C1260,80 1440,40 1440,40 L1440,100 L0,100 Z"/>
+      </svg>
+    </div>
+  </div>
+</div>

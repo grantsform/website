@@ -1,0 +1,134 @@
+<style>
+.footer-wrapper { position: relative; margin-top: 0; }
+.footer-wave-container { position: absolute; top: -100px; left: 0; width: 100%; height: 100px; overflow: hidden; z-index: 1; }
+.footer-wave { position: absolute; width: 200%; height: 100%; display: flex; }
+.footer-wave svg { flex: 0 0 50%; height: 100%; }
+.footer-wave.wave1 { animation: footerWaveFlow1 12s linear infinite; opacity: 0.4; }
+.footer-wave.wave2 { animation: footerWaveFlow2 8s linear infinite; opacity: 0.6; top: 10px; }
+.footer-wave.wave3 { animation: footerWaveFlow3 6s linear infinite; opacity: 1; top: 20px; }
+.footer-wave .shape-fill { fill: #f5e6d3; }
+.footer-wave .foam-fill { fill: #ffffff; }
+@keyframes footerWaveFlow1 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes footerWaveFlow2 {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@keyframes footerWaveFlow3 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.site-footer { background: linear-gradient(180deg, #f5e6d3, #e8d4bc); padding: 2rem 1rem; color: #5d4037; border: none; outline: none; box-shadow: none; }
+.footer-credit { color: #5d4037; }
+.footer-credit a.accent { color: #5d4037; font-weight: 600; text-decoration: none; }
+.footer-credit a.accent:hover { text-decoration: underline; color: #2e7d32; }
+.twitter-follow-button { border: 2px solid #5d4037; border-radius: 999px; display: inline-block; color: #5d4037; padding: 0.4rem 0.9rem; text-decoration: none; font-size: 0.9rem; }
+.twitter-follow-button:hover { background: rgba(46,125,50,0.1); color: #2e7d32; border-color: #2e7d32; }
+.socials-center { text-align: center; margin: 0.6rem 0 0.8rem; }
+.socials-center p { margin: 0; }
+.socials-center .social { display: inline-block; margin: 0 0.6rem; color: #5d4037; font-size: 28px; transition: transform 160ms ease, color 160ms ease; }
+.socials-center .social:hover { transform: translateY(-4px); color: #2e7d32; }
+.socials-center .social:focus { outline: 2px solid #5d4037; outline-offset: 4px; }
+.site-footer em { color: rgba(93,64,55,0.8); }
+@media (max-width: 768px) {
+  .mobile-break { display: none; }
+}
+</style>
+
+<div class="footer-wrapper">
+  <!-- Sand waves at top of footer - creates beach effect -->
+  <div class="footer-wave-container">
+    <!-- Back wave - slowest, white foam -->
+    <div class="footer-wave wave1">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,50 C150,80 350,20 600,50 C850,80 1050,20 1200,50 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,50 C150,80 350,20 600,50 C850,80 1050,20 1200,50 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+    </div>
+    <!-- Middle wave - white foam -->
+    <div class="footer-wave wave2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,60 C200,90 400,30 600,60 C800,90 1000,30 1200,60 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,60 C200,90 400,30 600,60 C800,90 1000,30 1200,60 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+    </div>
+    <!-- Front wave - sand colored -->
+    <div class="footer-wave wave3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,70 C100,85 200,55 350,70 C500,85 650,55 800,70 C950,85 1100,55 1200,70 L1200,120 L0,120 Z" class="shape-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,70 C100,85 200,55 350,70 C500,85 650,55 800,70 C950,85 1100,55 1200,70 L1200,120 L0,120 Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <!-- Social Links -->
+    <div class="socials-center" role="navigation" aria-label="Social links">
+    <p>
+      <a class="social" href="https://grantsform.github.io" target="_blank" rel="noopener" aria-label="Website">
+        <i class="fa-solid fa-house-user" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://gist.github.com/grantsform" target="_blank" rel="noopener" aria-label="Gists">
+        <i class="fa-solid fa-clipboard" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://github.com/grantsform" target="_blank" rel="noopener" aria-label="GitHub">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://discord.gg/6Re3dCKRgV" target="_blank" rel="noopener" aria-label="Discord">
+        <i class="fa-brands fa-discord" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://www.youtube.com/@grantsform" target="_blank" rel="noopener" aria-label="YouTube">
+        <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://www.twitch.tv/grantsform" target="_blank" rel="noopener" aria-label="Twitch">
+        <i class="fa-brands fa-twitch" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://grantsform.itch.io/" target="_blank" rel="noopener" aria-label="Itch.io">
+        <i class="fa-brands fa-itch-io" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://suno.com/@grantsform" target="_blank" rel="noopener" aria-label="Suno">
+        <i class="fa-solid fa-music" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://tiktok.com/@grantsform" target="_blank" rel="noopener" aria-label="TikTok">
+        <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://cash.app/$grantsform" target="_blank" rel="noopener" aria-label="Cash App">
+        <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://paypal.me/grantsform" target="_blank" rel="noopener" aria-label="PayPal">
+        <i class="fa-brands fa-paypal" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://patreon.com/grantsform" target="_blank" rel="noopener" aria-label="Patreon">
+        <i class="fa-brands fa-patreon" aria-hidden="true"></i>
+      </a>
+      <a class="social" href="https://github.com/sponsors/grantsform" target="_blank" rel="noopener" aria-label="Sponsor">
+        <i class="fa-solid fa-heart" aria-hidden="true"></i>
+      </a>
+    </p>
+  </div>
+  
+  <div class="footer-divider" style="background-color:#5d4037;height:4px;width:60%;margin:0 auto 2em auto;border-radius:2px;"></div>
+  
+  <div style="text-align: center;">
+    <p style="margin-bottom: 1.5em;">
+      <a href="https://twitter.com/grantsform" class="twitter-follow-button" style="color: #5d4037;" target="_blank" rel="noopener">
+        Follow @GrantsForm
+      </a>
+    </p>
+    <p class="footer-credit">
+      Built on <a class="accent" href="https://gohugo.io">Hugo</a>; Some With <a class="accent" href="https://godotengine.org" target="_blank">Godot</a>.
+    </p>
+    <p>
+      <em>All Content Here Is Under The CC-BY 4.x, Unless Explicitly Stated Otherwise;<br class="mobile-break">And/Or Unless Said Content Does Not Originate From `Joshua Steven Grant (ie: Jost Grant)`.</em>
+    </p>
+  </div>
+  </footer>
+</div>

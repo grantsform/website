@@ -1,0 +1,45 @@
+{{ define "main" }}
+<div class="w-9/10 max-w-7xl mx-auto px-4">
+  <div class="row">
+    <div class="col-12">
+      <header class="mb-4">
+        <h1>{{ .Title }}</h1>
+        {{- if .Description }}
+        <p class="lead">{{ .Description }}</p>
+        {{- end }}
+      </header>
+      
+      {{- if .Pages }}
+      <div class="row">
+        {{- range .Pages }}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <article class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"><a href="{{ .RelPermalink }}" class="text-decoration-none">{{ .Title }}</a></h5>
+              {{- if .Date }}
+              <div class="text-muted small mb-2">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+              </div>
+              {{- end }}
+              {{- if .Summary }}
+              <p class="card-text">{{ .Summary }}</p>
+              {{- end }}
+              {{- if .Params.tags }}
+              <div class="mt-auto">
+                {{- range first 3 .Params.tags }}
+                <span class="badge bg-secondary me-1">{{ . }}</span>
+                {{- end }}
+              </div>
+              {{- end }}
+            </div>
+          </article>
+        </div>
+        {{- end }}
+      </div>
+      {{- else }}
+      <p>No content found.</p>
+      {{- end }}
+    </div>
+  </div>
+</div>
+{{ end }}

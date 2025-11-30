@@ -1,0 +1,31 @@
+[
+    {
+        "title": "@GRANTSFORM",
+        "repos": [
+                    {
+                        "owner": "loremcorp",
+                        "repo": "ipsum-engine",
+                        "quip": "Lorem ipsum dolor sit amet.",
+                        "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac urna eu felis dapibus condimentum sit amet a augue."
+                    },
+                    {
+                        "owner": "dolorsoft",
+                        "repo": "sit-amet-framework",
+                        "quip": "Sed do eiusmod tempor incididunt.",
+                        "desc": "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer lacinia sollicitudin massa."
+                    },
+                    {
+                        "owner": "consecteturdevs",
+                        "repo": "adipiscing-ui",
+                        "quip": "Ut enim ad minim veniam.",
+                        "desc": "Cras suscipit, quam vitae dapibus facilisis, enim diam dictum urna, eget dictum eros elit ut nulla."
+                    },
+                    {
+                        "owner": "elitworks",
+                        "repo": "nullam-api",
+                        "quip": "Quis nostrud exercitation ullamco.",
+                        "desc": "Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi."
+                    }
+        ]
+    }
+]

@@ -1,0 +1,30 @@
+{
+    "guide": {
+        "title": "Duis aute dolor sit amet",
+        "desc": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "posts": [
+            {
+                "title": "Ut enim ad minim veniam",
+                "url": "/posts/lorem-getting-started-1.html"
+            },
+            {
+                "title": "Quis nostrud exercitation ullamco",
+                "url": "/posts/lorem-getting-started-2.html"
+            }
+        ]
+    },
+    "tutorial": {
+        "title": "Ut enim ad minim veniam",
+        "desc": "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "posts": [
+            {
+                "title": "Duis aute irure dolor in reprehenderit",
+                "url": "/posts/lorem-advanced-1.html"
+            },
+            {
+                "title": "Excepteur sint occaecat cupidatat non proident",
+                "url": "/posts/lorem-advanced-2.html"
+            }
+        ]
+    }
+}

@@ -1,0 +1,509 @@
+<style>
+/* Buoy styles */
+#buoy-container {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  pointer-events: auto;
+  cursor: grab;
+  z-index: 9999;
+  transition: transform 0.15s ease-out;
+}
+#buoy-container:active {
+  cursor: grabbing;
+}
+#buoy-speech {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  color: #333;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+#buoy-speech.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+#buoy-speech::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #ffffff;
+}
+#buoy-svg {
+  width: 100%;
+  height: 100%;
+}
+.buoy-body { fill: #ff6b35; }
+.buoy-stripe { fill: #ffffff; }
+.buoy-eye-white { fill: #ffffff; }
+.buoy-pupil { fill: #1a1a1a; transition: transform 0.1s ease-out; }
+.buoy-highlight { fill: rgba(255,255,255,0.4); }
+.buoy-shadow { fill: rgba(0,0,0,0.15); }
+</style>
+
+<!-- Buoy that follows the mouse -->
+<div id="buoy-container">
+  <div id="buoy-speech">Hi! I'm Baba Bouy.</div>
+  <svg id="buoy-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Mask to create hole in center -->
+      <mask id="buoy-hole-mask">
+        <rect x="0" y="0" width="100" height="100" fill="white"/>
+        <circle cx="50" cy="50" r="18" fill="black"/>
+      </mask>
+    </defs>
+    <!-- Outer ring shadow -->
+    <ellipse cx="52" cy="54" rx="38" ry="38" class="buoy-shadow" mask="url(#buoy-hole-mask)"/>
+    <!-- Orange outer ring with hole -->
+    <circle cx="50" cy="50" r="38" class="buoy-body" mask="url(#buoy-hole-mask)"/>
+    <!-- White stripes with hole -->
+    <g mask="url(#buoy-hole-mask)">
+      <path d="M50 12 A38 38 0 0 1 88 50 L72 50 A22 22 0 0 0 50 28 Z" class="buoy-stripe"/>
+      <path d="M50 88 A38 38 0 0 1 12 50 L28 50 A22 22 0 0 0 50 72 Z" class="buoy-stripe"/>
+    </g>
+    <!-- Eyes -->
+    <g id="buoy-eyes">
+      <!-- Left eye -->
+      <ellipse cx="38" cy="45" rx="10" ry="12" class="buoy-eye-white"/>
+      <circle id="left-pupil" cx="38" cy="45" r="5" class="buoy-pupil"/>
+      <ellipse cx="36" cy="42" rx="2" ry="3" class="buoy-highlight"/>
+      <!-- Right eye -->
+      <ellipse cx="62" cy="45" rx="10" ry="12" class="buoy-eye-white"/>
+      <circle id="right-pupil" cx="62" cy="45" r="5" class="buoy-pupil"/>
+      <ellipse cx="60" cy="42" rx="2" ry="3" class="buoy-highlight"/>
+    </g>
+    <!-- Highlight on buoy -->
+    <path d="M30 25 Q40 20 55 22 Q45 28 35 30 Z" fill="rgba(255,255,255,0.3)"/>
+  </svg>
+</div>
+
+<script>
+(function() {
+  const buoy = document.getElementById('buoy-container');
+  const buoySvg = document.getElementById('buoy-svg');
+  const leftPupil = document.getElementById('left-pupil');
+  const rightPupil = document.getElementById('right-pupil');
+  const speechBubble = document.getElementById('buoy-speech');
+  
+  if (!buoy || !leftPupil || !rightPupil) return;
+  
+  // Audio context for sound effects
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  function playBeep() {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+  }
+  
+  function playR2D2Scream() {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.setValueAtTime(1500, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 1.0);
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.0);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 1.0);
+  }
+  
+  function playPongBlip() {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+    oscillator.type = 'square';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+  }
+  
+  let buoyX = window.innerWidth / 2;
+  let buoyY = window.innerHeight / 2;
+  let mouseX = buoyX;
+  let mouseY = buoyY;
+  
+  // Physics state
+  let velocityX = 0;
+  let velocityY = 0;
+  let rotation = 0;
+  let rotationVelocity = 0;
+  let isThrown = false;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragHistory = [];
+  
+  // Track mouse position
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    if (isDragging) {
+      // Track drag history for velocity calculation
+      dragHistory.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+      if (dragHistory.length > 5) dragHistory.shift();
+      
+      // Move buoy with mouse while dragging
+      buoyX = e.clientX;
+      buoyY = e.clientY;
+    }
+  });
+  
+  // Mouse down - start dragging
+  buoy.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    isDragging = true;
+    isThrown = false;
+    velocityX = 0;
+    velocityY = 0;
+    rotationVelocity = 0;
+    dragHistory = [{ x: e.clientX, y: e.clientY, time: Date.now() }];
+    buoy.style.cursor = 'grabbing';
+    
+    // Hide speech bubble while dragging
+    speechBubble.classList.remove('visible');
+  });
+  
+  // Mouse up - throw!
+  document.addEventListener('mouseup', function(e) {
+    if (isDragging) {
+      isDragging = false;
+      buoy.style.cursor = 'grab';
+      
+      // Calculate throw velocity from drag history
+      if (dragHistory.length >= 2) {
+        const recent = dragHistory[dragHistory.length - 1];
+        const old = dragHistory[0];
+        const dt = (recent.time - old.time) / 1000;
+        
+        if (dt > 0) {
+          velocityX = (recent.x - old.x) / dt * 0.04;
+          velocityY = (recent.y - old.y) / dt * 0.04;
+          
+          const speed = Math.hypot(velocityX, velocityY);
+          if (speed > 10) {
+            isThrown = true;
+            rotationVelocity = velocityX * 0.15; // Spin based on horizontal velocity
+          }
+        }
+      }
+    }
+  });
+  
+  // Prevent drag on touch devices
+  let touchStartTime = 0;
+  let touchStartPos = { x: 0, y: 0 };
+  
+  buoy.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    touchStartTime = Date.now();
+    touchStartPos = { x: touch.clientX, y: touch.clientY };
+    isDragging = true;
+    isThrown = false;
+    velocityX = 0;
+    velocityY = 0;
+    rotationVelocity = 0;
+    dragHistory = [{ x: touch.clientX, y: touch.clientY, time: Date.now() }];
+  });
+  
+  document.addEventListener('touchmove', function(e) {
+    if (isDragging) {
+      const touch = e.touches[0];
+      mouseX = touch.clientX;
+      mouseY = touch.clientY;
+      dragHistory.push({ x: touch.clientX, y: touch.clientY, time: Date.now() });
+      if (dragHistory.length > 5) dragHistory.shift();
+      buoyX = touch.clientX;
+      buoyY = touch.clientY;
+    }
+  });
+  
+  document.addEventListener('touchend', function(e) {
+    if (isDragging) {
+      isDragging = false;
+      
+      const touchDuration = Date.now() - touchStartTime;
+      const lastPos = dragHistory.length > 0 ? dragHistory[dragHistory.length - 1] : touchStartPos;
+      const touchDistance = Math.hypot(lastPos.x - touchStartPos.x, lastPos.y - touchStartPos.y);
+      
+      // If it was a quick tap without much movement, show speech bubble
+      if (touchDuration < 300 && touchDistance < 20) {
+        if (!isThrown) {
+          if (clickCount < 2) {
+            speechBubble.textContent = initialMessage;
+          } else {
+            let message;
+            if (consecutivePain >= 3) {
+              message = otherMessages[Math.floor(Math.random() * otherMessages.length)];
+              consecutivePain = 0;
+              lastWasPain = false;
+            } else {
+              if (Math.random() < 0.7) {
+                message = painMessages[Math.floor(Math.random() * painMessages.length)];
+                consecutivePain++;
+                lastWasPain = true;
+              } else {
+                message = otherMessages[Math.floor(Math.random() * otherMessages.length)];
+                consecutivePain = 0;
+                lastWasPain = false;
+              }
+            }
+            speechBubble.textContent = message;
+          }
+          speechBubble.classList.add('visible');
+          playBeep();
+          
+          if (speechTimeout) clearTimeout(speechTimeout);
+          
+          speechTimeout = setTimeout(function() {
+            speechBubble.classList.remove('visible');
+            clickCount = 0;
+            lastWasPain = false;
+            consecutivePain = 0;
+          }, 3000);
+          
+          clickCount++;
+        }
+        return;
+      }
+      
+      // Otherwise, calculate throw velocity
+      if (dragHistory.length >= 2) {
+        const recent = dragHistory[dragHistory.length - 1];
+        const old = dragHistory[0];
+        const dt = (recent.time - old.time) / 1000;
+        
+        if (dt > 0) {
+          velocityX = (recent.x - old.x) / dt * 0.04;
+          velocityY = (recent.y - old.y) / dt * 0.04;
+          
+          const speed = Math.hypot(velocityX, velocityY);
+          if (speed > 10) {
+            isThrown = true;
+            rotationVelocity = velocityX * 0.15;
+          }
+        }
+      }
+    }
+  });
+  
+  let speechTimeout = null;
+  let clickCount = 0;
+  const initialMessage = "Hi! I'm Baba Bouy.";
+  const painMessages = ["Ow!", "Ouch!"];
+  const otherMessages = ["Stop That!", "Quit it!", "I'm Telling!", "That Hurts!", "Please Be Gentle!", "Yikes!", "Whoa!", "Easy There!", "Take It Easy!", "Hey!", "Cut It Out!"];
+  let lastWasPain = false;
+  let consecutivePain = 0;
+  
+  // Animate buoy
+  function animateBuoy() {
+    const buoySize = 80;
+    const halfSize = buoySize / 2;
+    
+    if (isThrown) {
+      // Physics simulation when thrown
+      const friction = 0.98;
+      const bounceDamping = 0.7;
+      
+      // Apply velocity
+      buoyX += velocityX;
+      buoyY += velocityY;
+      
+      // Apply friction
+      velocityX *= friction;
+      velocityY *= friction;
+      
+      // Apply rotation
+      rotation += rotationVelocity;
+      rotationVelocity *= 0.98;
+      
+      // Bounce off edges
+      let bounced = false;
+      
+      // Left edge
+      if (buoyX - halfSize < 0) {
+        buoyX = halfSize;
+        velocityX = -velocityX * bounceDamping;
+        rotationVelocity = -rotationVelocity * 0.8;
+        bounced = true;
+      }
+      // Right edge
+      if (buoyX + halfSize > window.innerWidth) {
+        buoyX = window.innerWidth - halfSize;
+        velocityX = -velocityX * bounceDamping;
+        rotationVelocity = -rotationVelocity * 0.8;
+        bounced = true;
+      }
+      // Top edge
+      if (buoyY - halfSize < 0) {
+        buoyY = halfSize;
+        velocityY = -velocityY * bounceDamping;
+        bounced = true;
+      }
+      // Bottom edge
+      if (buoyY + halfSize > window.innerHeight) {
+        buoyY = window.innerHeight - halfSize;
+        velocityY = -velocityY * bounceDamping;
+        bounced = true;
+      }
+      
+      // Show "AHHHHHHHHH!" when bouncing
+      if (bounced) {
+        speechBubble.textContent = 'AHHHHHHHHH!';
+        speechBubble.classList.add('visible');
+        playPongBlip();
+        if (speechTimeout) clearTimeout(speechTimeout);
+        speechTimeout = setTimeout(function() {
+          speechBubble.classList.remove('visible');
+          speechBubble.textContent = "Hi! I'm Baba Bouy.";
+        }, 1000);
+      }
+      
+      // Check if settled down
+      const speed = Math.hypot(velocityX, velocityY);
+      if (speed < 1 && Math.abs(rotationVelocity) < 1) {
+        isThrown = false;
+        // Smoothly return to upright
+        rotation = rotation % 360;
+        if (rotation > 180) rotation -= 360;
+        if (rotation < -180) rotation += 360;
+      }
+      
+      // Apply rotation to SVG
+      buoySvg.style.transform = 'rotate(' + rotation + 'deg)';
+      
+    } else if (!isDragging) {
+      // Normal following behavior
+      
+      // Smoothly return rotation to 0
+      rotation *= 0.9;
+      if (Math.abs(rotation) < 0.5) rotation = 0;
+      buoySvg.style.transform = 'rotate(' + rotation + 'deg)';
+      
+      // Calculate distance to mouse
+      const dx = mouseX - buoyX;
+      const dy = mouseY - buoyY;
+      const distToMouse = Math.hypot(dx, dy);
+      
+      // Stop at a body's length (80px) away from mouse
+      const minDistance = 80;
+      
+      let targetX = mouseX;
+      let targetY = mouseY;
+      
+      // If we're close enough, stay at minimum distance
+      if (distToMouse < minDistance && distToMouse > 0) {
+        const angle = Math.atan2(dy, dx);
+        targetX = mouseX - Math.cos(angle) * minDistance;
+        targetY = mouseY - Math.sin(angle) * minDistance;
+      }
+      
+      // Ease toward target position
+      const ease = 0.03;
+      buoyX += (targetX - buoyX) * ease;
+      buoyY += (targetY - buoyY) * ease;
+    }
+    
+    // Update buoy position
+    buoy.style.left = (buoyX - halfSize) + 'px';
+    buoy.style.top = (buoyY - halfSize) + 'px';
+    
+    // Calculate eye direction toward mouse
+    const buoyCenterX = buoyX;
+    const buoyCenterY = buoyY;
+    
+    // Left eye pupil movement
+    const leftEyeX = buoyCenterX - 12;
+    const leftEyeY = buoyCenterY - 5;
+    const leftAngle = Math.atan2(mouseY - leftEyeY, mouseX - leftEyeX);
+    const leftDist = Math.min(4, Math.hypot(mouseX - leftEyeX, mouseY - leftEyeY) / 50);
+    const leftPupilOffsetX = Math.cos(leftAngle) * leftDist;
+    const leftPupilOffsetY = Math.sin(leftAngle) * leftDist;
+    leftPupil.setAttribute('cx', 38 + leftPupilOffsetX);
+    leftPupil.setAttribute('cy', 45 + leftPupilOffsetY);
+    
+    // Right eye pupil movement
+    const rightEyeX = buoyCenterX + 12;
+    const rightEyeY = buoyCenterY - 5;
+    const rightAngle = Math.atan2(mouseY - rightEyeY, mouseX - rightEyeX);
+    const rightDist = Math.min(4, Math.hypot(mouseX - rightEyeX, mouseY - rightEyeY) / 50);
+    const rightPupilOffsetX = Math.cos(rightAngle) * rightDist;
+    const rightPupilOffsetY = Math.sin(rightAngle) * rightDist;
+    rightPupil.setAttribute('cx', 62 + rightPupilOffsetX);
+    rightPupil.setAttribute('cy', 45 + rightPupilOffsetY);
+    
+    requestAnimationFrame(animateBuoy);
+  }
+  
+  // Start animation
+  animateBuoy();
+  
+  // Click handler for speech bubble (only if not thrown)
+  buoy.addEventListener('click', function(e) {
+    if (!isThrown && !isDragging) {
+      if (clickCount < 2) {
+        speechBubble.textContent = initialMessage;
+      } else {
+        let message;
+        if (consecutivePain >= 3) {
+          message = otherMessages[Math.floor(Math.random() * otherMessages.length)];
+          consecutivePain = 0;
+          lastWasPain = false;
+        } else {
+          if (Math.random() < 0.7) {
+            message = painMessages[Math.floor(Math.random() * painMessages.length)];
+            consecutivePain++;
+            lastWasPain = true;
+          } else {
+            message = otherMessages[Math.floor(Math.random() * otherMessages.length)];
+            consecutivePain = 0;
+            lastWasPain = false;
+          }
+        }
+        speechBubble.textContent = message;
+      }
+      speechBubble.classList.add('visible');
+      playBeep();
+      
+      if (speechTimeout) clearTimeout(speechTimeout);
+      
+      speechTimeout = setTimeout(function() {
+        speechBubble.classList.remove('visible');
+        clickCount = 0;
+        lastWasPain = false;
+        consecutivePain = 0;
+      }, 3000);
+      
+      clickCount++;
+    }
+  });
+})();
+</script>

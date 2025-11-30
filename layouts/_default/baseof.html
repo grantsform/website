@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+<head>
+    <meta charset="utf-8">
+    <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    <meta name="author" content="{{ .Site.Params.author }}">
+    <meta name="keywords" content="{{ if .Params.tags }}{{ delimit .Params.tags ", " }}{{ else }}{{ .Site.Params.keywords }}{{ end }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="canonical" href="{{ .Permalink }}">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/chroma.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    
+    <!-- SAIL Ores - Tailwind CSS with Solar Theme -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = { theme: { extend: { colors: { solar: { primary: '#ffd54f', secondary: '#ffffff', tertiary: '#0a1628', 'bg-primary': '#0a1628', 'bg-secondary': '#0d2137', 'bg-tertiary': '#1e3a5f', 'text-primary': '#ffffff', 'text-secondary': '#ffd54f', 'text-muted': '#90caf9', border: '#1e3a5f', hover: '#ffeb3b', focus: '#2196f3' }, yellow: { 50: '#fffde7', 100: '#fff9c4', 200: '#fff59d', 300: '#fff176', 400: '#ffee58', 500: '#ffd54f', 600: '#ffca28', 700: '#ffb300', 800: '#ffa000', 900: '#ff8f00' }, fontFamily: { sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'] }, animation: { 'fade-in': 'fadeIn 0.5s ease-in-out', 'slide-up': 'slideUp 0.3s ease-out', 'scale-in': 'scaleIn 0.2s ease-out' }, keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } }, slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }, scaleIn: { '0%': { transform: 'scale(0.95)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } } }, plugins: [function({ addUtilities }) { addUtilities({ '.glass': { 'background': 'rgba(255, 255, 255, 0.1)', 'backdrop-filter': 'blur(10px)', 'border': '1px solid rgba(255, 255, 255, 0.2)' }, '.solar-gradient': { 'background': 'linear-gradient(135deg, #ffd54f 0%, #ffeb3b 100%)' }, '.solar-glow': { 'box-shadow': '0 0 20px rgba(255, 213, 79, 0.3)' } }) } ] }}}}
+    </script>
+    
+    <!-- Feeds -->
+    <link rel="alternate" type="application/rss+xml" href="/posts/index.xml" title="Posts RSS Feed">
+    <link rel="alternate" type="application/rss+xml" href="/index.xml" title="RSS Feed">
+    
+    {{ block "head" . }}{{ end }}
+</head>
+<body class="site-body">
+    {{ partial "ocean.html" . }}
+    {{ partial "bababouy.html" . }}
+    <div class="site-wrapper">
+        <header class="site-header">
+            {{ partial "navbar.html" . }}
+            {{ if .IsHome }}{{ partial "notice.html" . }}{{ end }}
+        </header>
+        
+        <main class="site-main">
+            {{ block "main" . }}{{ end }}
+        </main>
+        
+        {{ partial "footer.html" . }}
+    </div>
+    
+    <!-- JavaScript -->
+    <script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/custom.js"></script>
+    
+    {{ block "scripts" . }}{{ end }}
+</body>
+</html>

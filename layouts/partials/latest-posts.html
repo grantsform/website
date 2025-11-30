@@ -1,0 +1,51 @@
+<style>
+.latest-posts { margin: 2.5rem 0 2rem 0; }
+.latest-posts h2 { color: #ffd54f; margin-bottom: 1.2rem; }
+.posts-list { margin-bottom: 1.5rem; }
+.view-all-container { text-align: center; }
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.post-card { background: linear-gradient(180deg, #0d2137, #1a3a5c); color: #e0f0ff; padding: 1.25rem; border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); border: 1px solid rgba(33, 150, 243, 0.3); transition: transform 0.2s, box-shadow 0.2s; }
+.post-card:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5); }
+.post-card h3 { margin-top: 0; margin-bottom: 0.75rem; }
+.post-card h3 a { color: #64b5f6; text-decoration: none; }
+.post-card h3 a:hover { color: #ffd54f; }
+.post-meta { color: rgba(224, 240, 255, 0.6); font-size: 0.9rem; margin-bottom: 0.75rem; }
+.post-excerpt { color: rgba(224, 240, 255, 0.85); line-height: 1.5; margin-bottom: 1rem; }
+.post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.post-tag { background: rgba(33, 150, 243, 0.2); color: #64b5f6; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; text-decoration: none; }
+.post-tag:hover { background: rgba(33, 150, 243, 0.35); }
+.latest-posts .btn-space { background: linear-gradient(180deg, #2196f3, #1976d2); color: #fff; box-shadow: 0 6px 18px rgba(33,150,243,0.25), inset 0 -2px 4px rgba(0,0,0,0.16); }
+.latest-posts .btn-space:hover { transform: translateY(-2px); background: linear-gradient(180deg, #42a5f5, #2196f3); }
+</style>
+
+<section class="latest-posts">
+  <h2>Latest Blog Posts</h2>
+  <div class="latest-parent">
+    <div class="posts-list">
+      <div class="posts-grid">
+        {{- range first 6 (where (where .Site.RegularPages "Type" "posts") "Draft" false) }}
+        <article class="post-card">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="post-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+            {{- if .Params.author }} • {{ .Params.author }}{{- end }}
+          </div>
+          {{- if .Summary }}
+          <div class="post-excerpt">{{ .Summary }}</div>
+          {{- end }}
+          {{- if .Params.tags }}
+          <div class="post-tags">
+            {{- range .Params.tags }}
+            <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="post-tag">{{ . }}</a>
+            {{- end }}
+          </div>
+          {{- end }}
+        </article>
+        {{- end }}
+      </div>
+    </div>
+    <div class="view-all-container">
+      <a href="{{ "/posts/" | relURL }}" class="btn btn-sm btn-space">View all posts</a>
+    </div>
+  </div>
+</section>

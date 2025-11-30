@@ -1,0 +1,60 @@
+[
+    {
+        "title": "Major Website Revamp!",
+        "date": "2025-11-30",
+        "time": "00:00",
+        "url": "#",
+        "category": "Misc",
+        "color": "#ffd54f",
+        "description": "Full website revamp. Starting on much better footing to regularly post start of next year."
+    },
+    {
+        "title": "GrantCanon Discord",
+        "date": "2025-12-04",
+        "time": "00:00",
+        "url": "#",
+        "category": "Social",
+        "color": "#8bc34a",
+        "description": "Initial version of the Discord Server up and going."
+    },
+    {
+        "title": "Intro Video",
+        "date": "2025-12-06",
+        "time": "20:00",
+        "url": "#",
+        "category": "Video",
+        "color": "#e53935",
+        "description": "Initial intro-video, even if it's just demostream b-roll."
+    },
+    {
+        "title": "Coding Stream",
+        "time": "14:00",
+        "url": "#",
+        "category": "Stream",
+        "color": "#9c27b0",
+        "description": "Live coding session.",
+        "recurrence": {
+            "freq": "weekly",
+            "interval": 1,
+            "byDay": [
+                "Tue",
+                "Thu"
+            ],
+            "start": "2025-12-14",
+            "end": "2026-12-31",
+            "skip": [
+                "2025-12-23",
+                "2025-12-25"
+            ]
+        }
+    },
+    {
+        "title": "Gdmod: ''A Vr-y Merry Chirstmas'' Release",
+        "date": "2025-12-25",
+        "time": "00:00",
+        "url": "https://github.com/grantsform/gdmod/releases/",
+        "category": "Release",
+        "color": "#00bcd4",
+        "description": "A directional first-release for GDMod; Mostly Laying Out Intentions."
+    }
+]

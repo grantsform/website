@@ -1,0 +1,89 @@
+<style>
+.hero-wrapper { position: relative; }
+.site-hero { background: linear-gradient(180deg, #f5e6d3, #f5e6d3); color: #5d4037; padding: 4rem 0; padding-bottom: 2rem; }
+.site-hero .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
+.hero-title { font-size: 2.25rem; margin: 0 0 1rem 0; font-weight: 800; color: #5d4037; line-height: 1.1; text-align: left; }
+.hero-sub { font-size: 1.05rem; opacity: 0.95; margin: 0 0 1.5rem 0; line-height: 1.6; text-align: left; color: #5d4037; }
+.hero-cta { margin-top: 1rem; text-align: left; }
+.btn-space { background: linear-gradient(180deg, #5d4037, #4e342e); color: #fff; box-shadow: 0 6px 18px rgba(93,64,55,0.25), inset 0 -2px 4px rgba(0,0,0,0.16); }
+.btn-space:hover { transform: translateY(-2px); background: linear-gradient(180deg, #2e7d32, #1b5e20); }
+.hero-image { display: flex; align-items: center; justify-content: center; }
+
+.hero-wave-container { position: relative; width: 100%; height: 100px; overflow: hidden; z-index: 1; margin-top: -1px; transform: scaleY(-1); }
+.hero-wave { position: absolute; width: 200%; height: 100%; display: flex; }
+.hero-wave svg { flex: 0 0 50%; height: 100%; }
+.hero-wave.wave1 { animation: heroWaveFlow1 24s linear infinite; opacity: 0.4; }
+.hero-wave.wave2 { animation: heroWaveFlow2 16s linear infinite; opacity: 0.6; top: 10px; }
+.hero-wave.wave3 { animation: heroWaveFlow3 12s linear infinite; opacity: 1; top: 20px; }
+.hero-wave .shape-fill { fill: #f5e6d3; }
+.hero-wave .foam-fill { fill: #ffffff; }
+@keyframes heroWaveFlow1 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes heroWaveFlow2 {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@keyframes heroWaveFlow3 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* When screen gets smaller, switch to centered single column */
+@media (max-width: 1100px) {
+  .site-hero .hero-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .hero-title { text-align: center; }
+  .hero-sub { text-align: center; }
+  .hero-cta { text-align: center; }
+  .hero-image { order: 1; margin-top: 1rem; }
+}
+</style>
+
+<div class="hero-wrapper">
+  <header class="site-hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1 class="hero-title">Dilutions Of Grant'eur. lol</h1>
+        <p class="hero-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra.</p>
+        <p class="hero-cta">
+          <a class="btn btn-space" href="{{ "/about/" | relURL }}">Read More</a>
+        </p>
+      </div>
+      <div class="hero-image">
+        <img src="/face-grantsform.webp" alt="Grant's Form" style="width: 140px; height: 140px; border-radius: 50%; box-shadow: 0 12px 32px rgba(0,0,0,0.35); object-fit: cover;">
+      </div>
+    </div>
+  </header>
+
+  <!-- Sand waves at bottom of hero -->
+  <div class="hero-wave-container">
+    <!-- Back wave - slowest, white foam -->
+    <div class="hero-wave wave1">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,50 C150,80 350,20 600,50 C850,80 1050,20 1200,50 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,50 C150,80 350,20 600,50 C850,80 1050,20 1200,50 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+    </div>
+    <!-- Middle wave - white foam -->
+    <div class="hero-wave wave2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,60 C200,90 400,30 600,60 C800,90 1000,30 1200,60 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,60 C200,90 400,30 600,60 C800,90 1000,30 1200,60 L1200,120 L0,120 Z" class="foam-fill"></path>
+      </svg>
+    </div>
+    <!-- Front wave - sand colored -->
+    <div class="hero-wave wave3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,70 C100,85 200,55 350,70 C500,85 650,55 800,70 C950,85 1100,55 1200,70 L1200,120 L0,120 Z" class="shape-fill"></path>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,70 C100,85 200,55 350,70 C500,85 650,55 800,70 C950,85 1100,55 1200,70 L1200,120 L0,120 Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </div>
+</div>

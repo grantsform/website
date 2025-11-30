@@ -1,0 +1,30 @@
+<style>
+.timeline-wrap { position: relative; width: 100%; margin: 40px 0 56px 0; }
+.timeline-container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; position: relative; }
+.timeline-bar { height: 8px; background: var(--primary); border-radius: 4px; position: relative; width: 100%; z-index: 1; margin-top: 32px; }
+.timeline-events { display: flex; justify-content: space-between; align-items: flex-start; position: relative; top: -15px; z-index: 2; width: 100%; height: 0; }
+.timeline-event { text-align: center; width: 25%; position: relative; height: 0; }
+.timeline-dot { width: 18px; height: 18px; background: var(--primary); border-radius: 50%; margin: 0 auto; box-shadow: 0 2px 8px rgba(255,213,79,0.25); border: 2px solid #f5e6d3; position: absolute; left: 50%; top: 12px; transform: translate(-50%, -50%); z-index: 3; }
+.timeline-event-label { font-size: 12px; color: #f5e6d3; margin-top: 22px; font-weight: 700; background: transparent; border-radius: 6px; padding: 2px 0; box-shadow: none; position: relative; z-index: 4; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+</style>
+
+{{ $timeline := slice 
+  (dict "label" "Initial ProtoSite" "special" true)
+  (dict "label" "Buncha Tweaks" "special" false)
+  (dict "label" "Start Posting" "special" false)
+  (dict "label" "Post Often" "special" false)
+}}
+
+<div class="timeline-wrap">
+  <div class="timeline-container">
+    <div class="timeline-bar"></div>
+    <div class="timeline-events">
+      {{ range $timeline }}
+      <div class="timeline-event">
+        <div class="timeline-dot"{{ if .special }} style="background: #fff; border: 2px solid #000;"{{ end }}></div>
+        <div class="timeline-event-label">{{ .label }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

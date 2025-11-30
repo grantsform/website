@@ -1,0 +1,141 @@
+{
+    "coreSkills": [
+        {
+            "name": "GDScript",
+            "level": 70,
+            "url": "https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html"
+        },
+        {
+            "name": "Scheme",
+            "level": 50,
+            "url": "https://www.scheme.org/"
+        },
+        {
+            "name": "Common-Lisp",
+            "level": 40,
+            "url": "https://lisp-lang.org/"
+        },
+        {
+            "name": "GoLang",
+            "level": 30,
+            "url": "https://golang.org"
+        },
+        {
+            "name": "C++",
+            "level": 20,
+            "url": "https://isocpp.org/"
+        },
+        {
+            "name": "C",
+            "level": 20,
+            "url": "https://www.c-language.org/"
+        }
+    ],
+    "toolbelt": [
+        {
+            "name": "Docker / Podman",
+            "url": "https://podman.io/"
+        },
+        {
+            "name": "Arch Linux",
+            "url": "https://archlinux.org/"
+        },
+        {
+            "name": "Bootc"
+        },
+        {
+            "name": "Quadlets",
+            "url": "https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/"
+        },
+        {
+            "name": "Flatpak",
+            "url": "https://flatpak.org/"
+        },
+        {
+            "name": "Hyprland",
+            "url": "https://hyprland.org/"
+        },
+        {
+            "name": "Godot Engine",
+            "url": "https://godotengine.org/"
+        },
+        {
+            "name": "Raylib",
+            "url": "https://www.raylib.com/"
+        },
+        {
+            "name": "OpenAPI",
+            "url": "https://www.openapis.org/"
+        },
+        {
+            "name": "WASM",
+            "url": "https://webassembly.org/"
+        },
+        {
+            "name": "HTML",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTML"
+        },
+        {
+            "name": "Hugo",
+            "url": "https://gohugo.io/"
+        }
+    ],
+    "radarData": [
+        {
+            "subject": "Frontend",
+            "value": 30,
+            "angle": 0
+        },
+        {
+            "subject": "Backend",
+            "value": 30,
+            "angle": 60
+        },
+        {
+            "subject": "DevOps",
+            "value": 30,
+            "angle": 120
+        },
+        {
+            "subject": "DX / Tooling",
+            "value": 30,
+            "angle": 180
+        },
+        {
+            "subject": "UX",
+            "value": 30,
+            "angle": 240
+        },
+        {
+            "subject": "AI / ML",
+            "value": 30,
+            "angle": 300
+        }
+    ],
+    "interests": [
+        {
+            "icon": "🌌",
+            "label": "Spatial Computing",
+            "desc": "Moving interfaces from 1.5D to 2.5-3D.",
+            "detail": "ipsumzeta quorbits flenxar veloran quixthra sombrix norvalen"
+        },
+        {
+            "icon": "☯️",
+            "label": "Homoiconclasm",
+            "desc": "Code Is Data. Data Is Code. It's all language.",
+            "detail": "vexalon primetuid sogran ulmora phentrix lodamir tezrin"
+        },
+        {
+            "icon": "♻️",
+            "label": "Distribution",
+            "desc": "Distributed Programming x Data.",
+            "detail": "murpish tevalon crinsta dorvalen spindrek humbar lortha"
+        },
+        {
+            "icon": "🔧",
+            "label": "Modifying",
+            "desc": "Everything should be mo(l)dable.",
+            "detail": "brundel pexario yulb tremorin quastel varnum eldir"
+        }
+    ]
+}

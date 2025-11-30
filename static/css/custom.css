@@ -1,0 +1,699 @@
+/* === Global Theme === */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0a1628; /* deep ocean blue */
+  color: #fdfdfd;            /* clean white text */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Site Layout Structure === */
+.site-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex: 1;
+}
+
+.site-header {
+  flex-shrink: 0;
+}
+
+.site-main {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+:root {
+  --primary: #ffd54f; /* sunny yellow for main elements */
+  --secondary: #ffffff; /* white for secondary text */
+  --hero-brown: #1565c0; /* ocean blue for hero title */
+  --ocean-dark: #0a1628; /* deep ocean background */
+  --ocean-mid: #1e3a5f; /* mid ocean blue */
+  --ocean-light: #2196f3; /* bright ocean blue */
+  --sand: #f5e6d3; /* island sand color */
+  --sand-dark: #e8d4bc; /* darker sand for hover */
+}
+
+/* === Headings === */
+h1, h2, h3, h4, h5 {
+  color: var(--primary);
+}
+
+h1 {
+  font-size: 2.2rem !important; /* Moderately bigger h1 */
+  font-weight: 700 !important;
+}
+
+h2 {
+  font-size: 1.8rem !important; /* Moderately bigger h2 */
+  font-weight: 600 !important;
+}
+
+h3 {
+  font-size: 1.5rem !important; /* Moderately bigger h3 */
+  font-weight: 600 !important;
+}
+
+h4 {
+  font-size: 1.3rem !important; /* Moderately bigger h4 */
+  font-weight: 600 !important;
+}
+
+/* === Main Layout === */
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.main-col {
+  width: 100%;
+}
+
+/* === Projects/Posts Grid === */
+.projects-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+/* Ticker bar default styles */
+.ticker-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--primary);
+  color: #1a237e;
+  padding: 0.5em 2em;
+  width: 100%;
+  overflow: visible;
+}
+.ticker-text {
+  flex: 1 1 100%;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 1.05em;
+  line-height: 1.3;
+  text-align: center;
+  padding: 0.25em 0;
+}
+/* Chevron for ticker bar */
+.ticker-chevron {
+  display: inline-block;
+  vertical-align: middle;
+  width: 2em;
+  height: 2em;
+  margin-right: 0.5em;
+  transition: width 0.2s, height 0.2s;
+}
+.project-card header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary);
+}
+
+.project-meta {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+/* Make the latest post appear as a prominent card matching site card styles */
+.projects-grid article.project-card:first-child {
+  background: linear-gradient(180deg, #f5e6d3, #e8d4bc);
+  color: #1a237e;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 213, 79, 0.3);
+}
+
+/* Parent backing card for latest-posts section */
+.latest-parent {
+  position: relative;
+  /* reduce top padding so the latest post sits closer to the parent backing */
+  padding: 0.5rem 1rem 3.5rem 1rem; /* top right bottom left */
+  border-radius: 12px;
+  /* ocean themed backing */
+  background: linear-gradient(180deg, rgba(13,33,55,0.95), rgba(26,58,92,0.92));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  border: 1px solid rgba(33,150,243,0.3);
+}
+
+.latest-parent .posts-list { position: relative; z-index: 1; }
+.latest-parent .projects-grid { margin-top: 0; }
+.latest-parent .view-all-container {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+}
+
+/* Reserve space so the absolute button doesn't overlap content */
+.latest-parent {
+  padding-bottom: 3.5rem; /* room for the button plus breathing space */
+}
+
+/* On small screens, put the View All button into normal flow below the posts to avoid overlap */
+@media (max-width: 600px) {
+  .latest-parent {
+    padding-bottom: 1rem; /* reduce extra padding when button flows naturally */
+  }
+  .latest-parent .view-all-container {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+  }
+}
+
+/* Inline recent list inside the latest post card */
+.recent-list-inline { margin-top: 1.25rem; }
+.recent-list-title { margin: 0 0 0.4rem 0; color: var(--primary); font-size: 1.02rem; display: inline-block; text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--primary); text-underline-offset: 6px; }
+.recent-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.recent-list li { display: flex; gap: 0.6rem; align-items: baseline; color: rgba(255,255,255,0.92); }
+.recent-list time { color: rgba(255,255,255,0.66); font-family: monospace; font-size: 0.85rem; min-width: 10ch; display: inline-block; }
+.recent-list a { color: var(--secondary); }
+.recent-list a:hover { color: var(--primary); }
+/* === Lists === */
+/* Ensure bullet lists display properly */
+.content ul:not(.list-unstyled):not(.list-inline):not(.recent-list) {
+  list-style: disc;
+  margin-left: 1.5rem;
+  padding-left: 0;
+}
+
+.content ul:not(.list-unstyled):not(.list-inline):not(.recent-list) li {
+  margin-bottom: 0.5rem;
+}
+
+/* Ensure nested lists have different markers */
+.content ul:not(.list-unstyled):not(.list-inline):not(.recent-list) ul {
+  list-style: circle;
+}
+
+.content ul:not(.list-unstyled):not(.list-inline):not(.recent-list) ul ul {
+  list-style: square;
+}
+
+/* === Text Utilities === */
+.muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* === Links === */
+a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Navbar and dropdown styles moved to _src/inject-navbar.html */
+
+/* Prevent dropdown-toggle labels (Tags / Sub) from appearing underlined like active page links */
+.nav-link.dropdown-toggle {
+  text-decoration: none !important;
+  color: var(--secondary) !important;
+}
+
+.nav-link.dropdown-toggle:hover {
+  color: var(--primary) !important;
+}
+
+/* Strong override: ensure navbar dropdown labels (Tags / Sub) never inherit
+   the active-link underline from page-specific inline styles on the homepage.
+   This selector has higher specificity than `.nav-item.active > .nav-link`.
+*/
+.navbar .nav-item.dropdown > .nav-link.dropdown-toggle {
+  text-decoration: none !important;
+  text-decoration-color: transparent !important;
+  text-underline-offset: 0 !important;
+  color: var(--secondary) !important;
+}
+.navbar .nav-item.dropdown > .nav-link.dropdown-toggle:hover {
+  color: var(--primary) !important;
+  text-decoration: none !important;
+}
+
+/* Ensure dropdown labels are not bold (override active-link bolding) */
+.navbar .nav-item.dropdown > .nav-link.dropdown-toggle {
+  font-weight: 400 !important;
+}
+.navbar .nav-item.dropdown > .nav-link.dropdown-toggle:hover {
+  font-weight: 400 !important;
+}
+
+/* === Buttons === */
+.btn {
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === Dropdown Z-Index Fix === */
+/* Ensure navbar dropdowns appear above notice bar and other elements */
+/* First, ensure the navbar itself has a high enough z-index */
+nav {
+  z-index: 2000 !important;
+}
+
+/* Then ensure dropdowns are even higher */
+.dropdown > div:last-child {
+  z-index: 2100 !important;
+}
+
+/* Bootstrap dropdown fallback */
+.dropdown-menu {
+  z-index: 2100 !important;
+}
+
+/* Hugo navbar dropdown positioning */
+nav .dropdown div[id$="-dropdown"] {
+  z-index: 2100 !important;
+}
+
+/* Specific targeting for the navbar dropdowns */
+nav.sticky div[id$="-dropdown"],
+nav div[id$="-dropdown"] {
+  z-index: 2100 !important;
+}
+
+/* Alternative approach: Lower the notice z-index to ensure navbar dropdowns show above */
+#homepage-notice {
+  z-index: 900 !important;
+}
+
+/* Ensure notice close button doesn't interfere */
+#notice-close-btn {
+  z-index: 950 !important;
+}
+
+/* === Dropdown Styling === */
+/* Ocean blue background and yellow border for dropdown menus */
+.dropdown > div:last-child {
+  background-color: #0d2137 !important;
+  border: 2px solid var(--primary) !important;
+  border-color: #ffd54f !important;
+}
+
+/* Bootstrap dropdown fallback styling */
+.dropdown-menu {
+  background-color: #0d2137 !important;
+  border: 2px solid var(--primary) !important;
+  border-color: #ffd54f !important;
+}
+
+/* Hugo navbar dropdown styling */
+nav .dropdown div[id$="-dropdown"] {
+  background-color: #0d2137 !important;
+  border: 2px solid var(--primary) !important;
+  border-color: #ffd54f !important;
+}
+
+/* Dropdown items styling */
+.dropdown > div:last-child a,
+.dropdown-menu a,
+nav .dropdown div[id$="-dropdown"] a {
+  color: #ffffff !important;
+}
+
+.dropdown > div:last-child a:hover,
+.dropdown-menu a:hover,
+nav .dropdown div[id$="-dropdown"] a:hover {
+  background-color: #1e3a5f !important;
+  color: var(--primary) !important;
+}
+
+/* === Cards === */
+.card {
+  background-color: #f5e6d3;
+  border: 1px solid #e8d4bc;
+  color: #1a237e;
+}
+
+/* === Footer === */
+.site-footer {
+  background-color: #061220;
+  color: var(--secondary);
+  padding: 2rem 0;
+  border-top: 1px solid #1e3a5f;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+/* === Space Theme Elements === */
+.space-accent {
+  color: var(--primary);
+}
+
+.space-border {
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+}
+
+/* Make post/article containers use a mostly-opaque sand background so the
+   yellow outline reads clearly; slight transparency keeps subtle context.
+   Target the article element with this class to avoid affecting other small
+   UI elements that might reuse .space-border. */
+article.space-border {
+  /* stronger rule to override any other background rules */
+  background-color: rgba(245,230,211,0.96) !important;
+  padding: 1.25rem;
+  position: relative; /* create a stacking context */
+  z-index: 1; /* sit above the wave canvas */
+  background-clip: padding-box;
+  transition: background-color 220ms ease;
+}
+
+.galaxy-glow {
+  box-shadow: 0 0 20px rgba(255, 213, 79, 0.3);
+}
+
+/* Notice chevron animation */
+#homepage-notice {
+  background-image: repeating-linear-gradient(135deg, #ffffff 0 18px, #ffd54f 18px 36px);
+  background-size: 200% 100%;
+  /* animation moved to inject-notice.js to avoid template parsing of @keyframes */
+}
+
+/* Typography and spacing */
+h1.space-accent { 
+  font-family: 'Montserrat', 'Segoe UI', sans-serif; 
+  font-weight: 700; 
+}
+h1, h2 { 
+  letter-spacing: 0.03em; 
+}
+
+.post-title {
+  color: var(--primary); /* orange title */
+  font-weight: 800;
+}
+
+/* Article and card polish */
+.space-card { 
+  padding: 1.25rem; 
+  background: linear-gradient(180deg, #f5e6d3, #e8d4bc); 
+}
+
+/* Responsive rules */
+@media (max-width: 900px) {
+  .site-hero .hero-inner { 
+    flex-direction: column; 
+    text-align: center; 
+  }
+  /* Responsive rule for events include */
+  .events .events-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1200px) {
+  .vault-card { 
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .vault-card { 
+    flex-basis: 45%; 
+  }
+  .vaults-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 500px) {
+  .vault-card { 
+    flex-basis: 100%; 
+  }
+  .vaults-grid { 
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 750px) {
+  .events .events-inner {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.75rem;
+  }
+  .events .calendar,
+  .events .upcoming {
+    width: 100%;
+    /* allow the panels to use the full viewport width on small screens
+       and when zoomed; keep a small internal padding for breathing room */
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .events .upcoming {
+    margin-top: 0;
+  }
+}
+
+
+
+
+
+  /* small-screen fallback */
+  @media (max-width: 480px) {
+    .vault-desc {
+      width: auto;
+      max-width: 260px;
+      padding: 0.6rem 0.75rem;
+    }
+  }
+
+
+
+
+a.btn-space:hover, .btn-space:hover {
+  color: #fff !important;
+}
+
+
+
+
+
+/* === Highlighted text for ==HIGHLIGHT== === */
+.highlight {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px 0 rgba(255, 111, 0, 0.10);
+}
+hr {
+  border: none;
+  border-top: 1px dashed var(--primary);
+  margin: 1.5em 0;
+  height: 0;
+  background: none;
+}
+/* === Blockquotes (subtle) === */
+blockquote {
+  background: none;
+  color: #90caf9;
+  border-left: 3px solid #64b5f6;
+  padding: 0.05em 1em 0.05em 1em;
+  margin: 0.8em 0 1.2em 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 1.01rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* === Bubble Quote (speech bubble, yellow bar, etc) === */
+.bubble-quote {
+  display: inline-block;
+  background: #fff;
+  color: #1565c0; /* ocean blue */
+  padding: 0.35em 1em 0.35em 1.2em;
+  margin: 0.8em 0 1.6em 0;
+  border-radius: 18px 18px 18px 8px;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 400;
+  position: relative;
+  box-shadow: 0 4px 18px 0 rgba(255, 213, 79, 0.2);
+  overflow: visible;
+  border-left: 6px solid var(--primary);
+  min-width: 180px;
+  max-width: 100%;
+}
+.bubble-quote::before {
+  content: '';
+  display: none;
+}
+.bubble-quote:after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  bottom: -16px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 16px solid #fff;
+  z-index: 2;
+}
+.bubble-quote .quote-mark {
+  font-family: serif;
+  color: var(--primary);
+  font-size: 1.3em;
+  margin-right: 0.2em;
+  vertical-align: middle;
+  display: inline;
+}
+
+
+/* === Spoiler === */
+.spoiler {
+  background: #888;
+  color: #888;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  position: relative;
+  user-select: none;
+}
+.spoiler.revealed {
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+
+@media (max-width: 800px) {
+  .site-hero .hero-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .site-hero .hero-inner > div {
+    width: 100%;
+  }
+  .hero-title, .hero-sub, .hero-cta {
+    text-align: center;
+  }
+  /* Ticker bar responsive styles */
+    .ticker-bar {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      flex-wrap: wrap !important;
+      padding: 0.75em 1em;
+      height: auto !important;
+      min-height: 2.5em;
+    }
+    .ticker-text {
+      font-size: 1em;
+      padding: 0.35em 0;
+      overflow: visible !important;
+      text-overflow: unset !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+    }
+    .ticker-chevron {
+      width: 2.5em;
+      height: 3em;
+      min-height: 2.5em;
+      margin-bottom: 0.5em;
+    }
+  /* Notice/ticker responsive rules (moved from templates) */
+  .notice-body {
+      /* default pill layout: controls left+right with ticker centered */
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+  }
+    .notice-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    /* default: nav-left at start, text centered, close at end */
+    .notice-nav-left { order: 0; }
+    #homepage-notice .notice-text { order: 1; flex: 1 1 auto; text-align: center; }
+    #notice-close-btn { order: 2; margin-left: 0.25rem; }
+  .notice-nav-btn {
+    width: 2.6em;
+    min-height: 2.6em;
+    font-size: 1.05em;
+  }
+  #notice-close-btn { width: 2.4em; height: 2.4em; }
+}
+
+
+@media (max-width: 720px) {
+  /* Small screens: controls left & right on first row, ticker becomes its own centered row */
+  .notice-body { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .notice-controls { order: 1; flex: 1 0 auto; display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; }
+  .notice-nav-left { order: 0; }
+  #notice-close-btn { order: 2; margin-left: auto; flex: 0 0 auto; }
+  /* ticker JSON/text on a new line, centered */
+  #homepage-notice .notice-text { order: 3; flex-basis: 100%; width: 100%; text-align: center; padding-top: 0.35rem; }
+}
+
+
+/* Media queries for skills section */
+.page-link {
+  background-color: #0d2137; /* ocean dark */
+  color: var(--primary); /* sunny yellow */
+  border: 2px solid var(--primary); /* yellow outline */
+  outline: none;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+}
+.page-link:hover,
+.page-link:focus {
+  background-color: #1e3a5f; /* slightly lighter ocean for hover */
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* === Universal Tag Style === */
+.tag-badge, .post-tag, .badge.bg-primary, .badge.bg-secondary, .navbar .dropdown-menu a, .navbar .dropdown-item {
+  background: rgba(33, 150, 243, 0.2) !important; /* ocean blue */
+  color: #64b5f6 !important; /* light blue text */
+  border: 1.5px solid rgba(33, 150, 243, 0.4) !important;
+  border-radius: 4px !important;
+  font-weight: 600;
+  font-size: 0.92em;
+  text-decoration: none !important;
+}
+
+.tag-badge:hover, .post-tag:hover, .badge.bg-primary:hover, .badge.bg-secondary:hover, .navbar .dropdown-menu a:hover, .navbar .dropdown-item:hover {
+  background: rgba(33, 150, 243, 0.35) !important;
+  color: #ffd54f !important;
+  border-color: #2196f3 !important;
+}
