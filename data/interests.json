@@ -83,32 +83,32 @@
     "radarData": [
         {
             "subject": "Frontend",
-            "value": 30,
+            "value": 70,
             "angle": 0
         },
         {
-            "subject": "Backend",
-            "value": 30,
+            "subject": "AI / ML",
+            "value": 60,
             "angle": 60
         },
         {
             "subject": "DevOps",
-            "value": 30,
+            "value": 55,
             "angle": 120
         },
         {
-            "subject": "DX / Tooling",
-            "value": 30,
+            "subject": "Backend",
+            "value": 60,
             "angle": 180
         },
         {
-            "subject": "UX",
-            "value": 30,
+            "subject": "DX / Tooling",
+            "value": 80,
             "angle": 240
         },
         {
-            "subject": "AI / ML",
-            "value": 30,
+            "subject": "UX",
+            "value": 90,
             "angle": 300
         }
     ],

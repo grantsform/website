@@ -1,6 +1,6 @@
 ---
 title: "The Linux Common Denominator"
-date: 0000-00-00T00:00:00Z
+date: 2025-12-23T00:00:00Z
 tags: ["Tech", "Linux"]
 categories: ["Tech"]
 draft: true

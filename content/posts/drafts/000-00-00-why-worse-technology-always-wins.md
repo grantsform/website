@@ -1,6 +1,6 @@
 ---
 title: "Why B̶a̶d̶ Worse Technology (Almost) ALWAYS Wins"
-date: 0000-00-00T00:00:00Z
+date: 2025-12-23T00:00:00Z
 tags: ["Opinion", "Meta"]
 categories: ["Opinion"]
 draft: true

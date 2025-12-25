@@ -10,7 +10,7 @@
     },
     {
         "title": "GrantCanon Discord",
-        "date": "2025-12-04",
+        "date": "2026-01-04",
         "time": "00:00",
         "url": "#",
         "category": "Social",
@@ -19,7 +19,7 @@
     },
     {
         "title": "Intro Video",
-        "date": "2025-12-06",
+        "date": "2026-01-06",
         "time": "20:00",
         "url": "#",
         "category": "Video",
@@ -40,21 +40,17 @@
                 "Tue",
                 "Thu"
             ],
-            "start": "2025-12-14",
-            "end": "2026-12-31",
-            "skip": [
-                "2025-12-23",
-                "2025-12-25"
-            ]
+            "start": "2026-01-13",
+            "end": "2026-03-31"
         }
     },
     {
-        "title": "Gdmod: ''A Vr-y Merry Chirstmas'' Release",
-        "date": "2025-12-25",
+        "title": "DEMODISK: ''Laser Focus''",
+        "date": "2025-12-31",
         "time": "00:00",
         "url": "https://github.com/grantsform/gdmod/releases/",
         "category": "Release",
         "color": "#00bcd4",
-        "description": "A directional first-release for GDMod; Mostly Laying Out Intentions."
+        "description": "My research aimed / focused intentions for Demodisk x Godot-Lisp in 2026 & Onwards."
     }
 ]

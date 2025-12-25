@@ -53,18 +53,18 @@ publishDir = "../grantsform.github.io"
   
   # Featured Projects
   [[params.featuredProjects]]
-    title = "CheatNodes"
-    description = "Λn In-Instance Editor And Tooling For Godot."
-    url = "https://github.com/cheatnodes"
+    title = "Godot-Lisp"
+    description = "Λ Custom LISP Implementation x Tooling (Editor Support, Etc) For The Godot Game Engine."
+    url = "https://github.com/godot-lisp"
     buttonText = "Go!"
-    image = "/proj-cheatnodes.webp"
+    image = "/proj-godot-lisp.webp"
   
   [[params.featuredProjects]]
-    title = "GDmod"
-    description = "Λ XR Scriptable Physics Sandbox."
-    url = "https://github.com/gdmod"
+    title = "DemoDisk"
+    description = "A Scriptable Sandbox For Godot-Lisp."
+    url = "https://github.com/demodisk"
     buttonText = "Go!"
-    image = "/proj-gdmod.webp"
+    image = "/proj-demodisk.webp"
   
   # Also Working On Projects
   [[params.alsoWorkingOn]]
@@ -89,11 +89,11 @@ publishDir = "../grantsform.github.io"
     image = "/proj-gatelinux.webp"
   
   [[params.alsoWorkingOn]]
-    title = "Godot-Lisp"
-    description = "Λ Custom LISP Implementation x Tooling (Editor Support, Etc) For The Godot Game Engine."
-    url = "https://github.com/godot-lisp"
+    title = "CheatNodes"
+    description = "Λn In-Instance Editor And Tooling For Godot."
+    url = "https://github.com/cheatnodes"
     buttonText = "Go!"
-    image = "/proj-godot-lisp.webp"
+    image = "/proj-cheatnodes.webp"
   
 [menu]
   [[menu.main]]
