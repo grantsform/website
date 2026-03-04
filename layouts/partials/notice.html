@@ -1,0 +1,164 @@
+<!-- Notice bar below navbar, above hero -->
+<style>
+#homepage-notice { position: relative; width: 100%; overflow: hidden; padding: 0.35em 0; box-shadow: 0 2px 12px #0002; z-index: 1000; min-height: unset; }
+#homepage-notice::before { content: ''; position: absolute; top: 0; left: -100%; width: 300%; height: 100%; background: repeating-linear-gradient(135deg, #fff, #fff 20px, #ff9800 20px, #ff9800 40px); animation: scrollRight 2s linear infinite; will-change: transform; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; perspective: 1000px; -webkit-perspective: 1000px; }
+#homepage-notice .notice-inner { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; box-sizing: border-box; padding: 0 1rem; }
+.notice-wrap { position: relative; width: 100%; display: flex; align-items: center; }
+.notice-nav-btn { background: #0d2137; color: #ffd54f; border: none; width: 2.2em; min-height: 2.2em; padding: 0.25em; display: inline-flex; align-items: center; justify-content: center; margin: 0 0.15rem; border-radius: 0.35rem; cursor: pointer; box-shadow: 0 1px 3px #0006; font-size: 1em; }
+.notice-nav-btn:hover { color: #fff; }
+.notice-body { background: #0d2137; color: #fff; padding: 0.3em 0.6em; border-radius: 0.5em; display: flex; align-items: center; gap: 0.5rem; flex: 1 1 auto; position: relative; box-sizing: border-box; }
+.notice-nav-left { display: flex; align-items: center; gap: 0.15rem; }
+#homepage-notice .notice-text { color: #fff; font-weight: 600; font-size: 1.0em; text-align: center; display: block; box-sizing: border-box; position: relative; left: auto; transform: none; white-space: normal; overflow: visible; text-overflow: unset; max-width: none; z-index: 2; flex: 1 1 auto; word-break: break-word; line-height: 1.3; padding: 0.15em 0; }
+#notice-close-btn { position: relative; top: auto; right: auto; transform: none; background: #0d2137; border: none; font-size: 1.05em; color: #ffffff; cursor: pointer; line-height: 1; width: 1.8em; height: 1.8em; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px #0006; z-index: 1100; }
+.notice-controls { display: flex; align-items: center; gap: 0.5rem; }
+#homepage-notice .notice-text a, #homepage-notice .notice-text a:visited, #homepage-notice .notice-item a { color: #ffd54f; text-decoration: underline; }
+#homepage-notice .notice-text a:hover, #homepage-notice .notice-item a:hover { color: #ffffff; text-decoration: underline; }
+#homepage-notice .notice-text mark, #homepage-notice .notice-item mark { background: #ffd54f; color: #1a237e; padding: 0 0.12em; border-radius: 0.12em; font-weight: 700; }
+@keyframes scrollRight {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(56.57px, 0, 0); }
+}
+</style>
+
+<div id="homepage-notice">
+  <div class="notice-inner">
+    <div class="w-9/10 max-w-7xl mx-auto px-4 notice-wrap">
+      <div class="notice-body">
+        <div class="notice-controls">
+          <div class="notice-nav-left" style="display:flex; align-items:center;">
+            <button class="notice-nav-btn" id="notice-prev-btn" aria-label="previous message">&lt;</button>
+            <button class="notice-nav-btn" id="notice-next-btn" aria-label="next message">&gt;</button>
+          </div>
+        </div>
+        <span class="notice-text" id="notice-text">Loading...</span>
+        <button id="notice-close-btn" aria-label="Close notice">&times;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ $ticker := .Site.Data.ticker }}
+
+<script type="application/json" id="notice-ticker-json">
+{{ $ticker | jsonify }}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Notice script starting...');
+    var btn = document.getElementById('notice-close-btn');
+    var bar = document.getElementById('homepage-notice');
+    var textEl = document.getElementById('notice-text');
+    var tickerInterval = null;
+    var messages = ['⚠️ ==WARNING==: Site Under Active Development!']; // fallback
+    
+    console.log('Found elements:', {
+        btn: !!btn,
+        bar: !!bar, 
+        textEl: !!textEl
+    });
+
+    // Try to load ticker data first
+    var tickerScript = document.getElementById('notice-ticker-json');
+    console.log('Ticker script element:', !!tickerScript);
+    if (tickerScript) {
+        console.log('Ticker script content:', tickerScript.textContent);
+    }
+    
+    if (tickerScript && tickerScript.textContent.trim()) {
+        try {
+            var tickerData = JSON.parse(tickerScript.textContent);
+            // Handle double-encoded JSON (string containing JSON array)
+            if (typeof tickerData === 'string') {
+                tickerData = JSON.parse(tickerData);
+            }
+            if (Array.isArray(tickerData) && tickerData.length > 0) {
+                messages = tickerData.map(function(x){ return String(x); });
+                console.log('Loaded ticker messages:', messages);
+            }
+        } catch (e) {
+            console.error('Failed to parse ticker JSON:', e);
+        }
+    }
+
+    // Simple markdown to HTML converter for ticker messages
+    function markdownToHtml(text) {
+        if (!text) return '';
+        // Convert highlight ==text== to HTML mark
+        text = text.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+        // Convert markdown links [text](url) to HTML
+        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+        // Convert bold **text** to HTML
+        text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        // Convert italic *text* to HTML (single asterisk)
+        text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        return text;
+    }
+
+    function startTicker() {
+        console.log('Starting ticker with messages:', messages);
+        if (!messages || messages.length === 0) return;
+        var idx = 0;
+        if (textEl) textEl.innerHTML = markdownToHtml(messages[0]);
+        textEl._tickerIndex = 0;
+
+        function advance() {
+            var ni = (textEl._tickerIndex + 1) % messages.length;
+            textEl._tickerIndex = ni;
+            console.log('Advancing to message', ni, ':', messages[ni]);
+            if (textEl) textEl.innerHTML = markdownToHtml(messages[ni]);
+        }
+
+        var prevBtn = document.getElementById('notice-prev-btn');
+        var nextBtn = document.getElementById('notice-next-btn');
+        
+        console.log('Found navigation buttons:', {
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn
+        });
+
+        function showIndex(i) {
+            if (!messages || !messages.length) return;
+            i = ((i % messages.length) + messages.length) % messages.length;
+            textEl._tickerIndex = i;
+            console.log('Showing index', i, ':', messages[i]);
+            if (textEl) textEl.innerHTML = markdownToHtml(messages[i]);
+        }
+
+        function resetInterval() {
+            if (tickerInterval) clearInterval(tickerInterval);
+            if (messages.length > 1) {
+                console.log('Setting up auto-advance interval');
+                tickerInterval = setInterval(advance, 8000);
+            }
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', function() { 
+            console.log('Previous button clicked');
+            showIndex(textEl._tickerIndex - 1); 
+            resetInterval(); 
+        });
+        if (nextBtn) nextBtn.addEventListener('click', function() { 
+            console.log('Next button clicked');
+            showIndex(textEl._tickerIndex + 1); 
+            resetInterval(); 
+        });
+
+        if (messages.length > 1) {
+            console.log('Setting up initial auto-advance interval');
+            tickerInterval = setInterval(advance, 8000);
+        } else {
+            console.log('Only one message, no auto-advance');
+        }
+    }
+
+    startTicker();
+
+    if (btn && bar) {
+        btn.onclick = function() {
+            bar.style.display = 'none';
+            if (tickerInterval) { clearInterval(tickerInterval); tickerInterval = null; }
+        };
+    }
+});
+</script>

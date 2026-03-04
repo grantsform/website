@@ -1,0 +1,162 @@
+<style>
+.featured-series-flex { display: flex; gap: 2rem; align-items: stretch; position: relative; padding: 0.75rem; }
+.featured-series-card { flex: 3 1 0; background: linear-gradient(180deg, #0d2137, #1a3a5c); color: #e0f0ff; padding: 1rem; border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); border: 1px solid rgba(33, 150, 243, 0.3); display: flex; flex-direction: column; min-height: 320px; max-height: 400px; transition: box-shadow 0.2s; position: relative; z-index: 1; overflow: hidden; }
+.featured-series-card h3 { margin-top: 0; color: #64b5f6; flex-shrink: 0; }
+.featured-series-card > p { flex-shrink: 0; color: rgba(224, 240, 255, 0.7); }
+.featured-series-card ul { flex: 1; overflow-y: auto; margin: 0; padding: 0; list-style: none; scrollbar-width: thin; scrollbar-color: #2196f3 transparent; }
+.featured-series-card ul::-webkit-scrollbar { width: 6px; }
+.featured-series-card ul::-webkit-scrollbar-thumb { background: #2196f3; border-radius: 3px; }
+.featured-series-card ul::-webkit-scrollbar-track { background: transparent; }
+.featured-series-card li { padding: 0.25rem 0; border-bottom: 1px solid rgba(33,150,243,0.2); }
+.featured-series-card li:last-child { border-bottom: none; }
+.featured-series-card li a { color: #e0f0ff; text-decoration: none; }
+.featured-series-card li a:hover { color: #ffd54f; }
+.featured-series-tabs { flex: 1 1 0; display: flex; flex-direction: column; gap: 0.5rem; justify-content: flex-start; position: relative; z-index: 1; max-height: 400px; }
+.series-tab { background: linear-gradient(180deg, #0d2137, #1a3a5c); color: #e0f0ff; border: none; border-radius: 6px; padding: 0.8rem 1rem; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.18s, color 0.18s; border: 1px solid rgba(33,150,243,0.2); }
+.series-tab:hover { background: rgba(33,150,243,0.2); color: #64b5f6; }
+.series-tab.active { background: #2196f3; color: #ffffff; font-weight: bold; }
+.featured-series-flex::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,33,55,0.95), rgba(26,58,92,0.92)); border-radius: 12px; z-index: 0; pointer-events: none; box-shadow: 0 12px 40px rgba(0,0,0,0.4); border: 1px solid rgba(33,150,243,0.3); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.featured-series { margin: 2rem 0; }
+
+/* Mobile responsive layout */
+@media (max-width: 767px) {
+  .featured-series-flex { flex-direction: column; gap: 1rem; }
+  .featured-series-tabs { flex: 0 0 auto; flex-direction: row; overflow-x: auto; max-height: none; gap: 0.25rem; padding: 0.5rem; scrollbar-width: thin; scrollbar-color: #2196f3 transparent; }
+  .featured-series-tabs::-webkit-scrollbar { height: 4px; }
+  .featured-series-tabs::-webkit-scrollbar-thumb { background: #2196f3; border-radius: 2px; }
+  .featured-series-tabs::-webkit-scrollbar-track { background: transparent; }
+  .series-tab { flex-shrink: 0; white-space: nowrap; padding: 0.6rem 0.8rem; font-size: 0.9rem; }
+  .featured-series-card { flex: none; min-height: 280px; }
+}
+</style>
+
+<section id="featured-series" class="featured-series">
+  <div class="container">
+    <h2 style="color: #ffd54f;">Featured Series</h2>
+    <p style="color: #e8d4bc;">A series is a collection of posts, such as guides, tutorials, or themed articles. Explore our curated series below.</p>
+    <div class="featured-series-flex">
+      <div class="featured-series-card" id="series-card">
+        {{- /* gather series entries but skip the top-level series section page itself */ -}}
+        {{- $seriesPages := where (where .Site.Pages "Section" "series") ".File.Dir" "ne" "series/" }}
+        {{- $firstSeries := index $seriesPages 0 }}
+        {{- if $firstSeries }}
+        <h3><a href="{{ $firstSeries.Permalink }}">{{ $firstSeries.Title }}</a></h3>
+        <p>{{ $firstSeries.Description | markdownify }}</p>
+        <ul>
+          <!-- Posts would be listed here, but currently not automated -->
+          <li>Posts coming soon...</li>
+        </ul>
+        {{- end }}
+      </div>
+      <div class="featured-series-tabs">
+        {{- /* gather series entries but skip the root index page */ -}}
+        {{- $seriesPages := where (where .Site.Pages "Section" "series") ".File.Dir" "ne" "series/" }}
+        {{- $index := 0 }}
+        {{- range $seriesPages }}
+        <button class="series-tab{{ if eq $index 0 }} active{{ end }}" 
+                data-series="{{ .File.BaseFileName }}"
+                data-index="{{ $index }}"
+                data-title="{{ .Title }}"
+                data-desc="{{ .Description | markdownify }}"
+                data-url="{{ .Permalink }}">
+          {{ .Title }}
+        </button>
+        {{- $index = add $index 1 }}
+        {{- end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+// Simplified series tab switching
+var carouselInterval = null;
+var restartTimer = null; // holds recent restart timeout
+var currentSeriesIndex = 0;
+
+function renderSeriesCard(tab) {
+  const title = tab.getAttribute('data-title');
+  const desc = tab.getAttribute('data-desc');
+  const url = tab.getAttribute('data-url');
+  
+  const card = document.getElementById('series-card');
+  card.innerHTML = `
+    <h3><a href="${url}">${title}</a></h3>
+    <p>${desc}</p>
+    <ul>
+      <!-- Posts coming soon... -->
+    </ul>
+  `;
+}
+
+function setActiveTab(targetIndex) {
+  document.querySelectorAll('.series-tab').forEach((tab, index) => {
+    tab.classList.toggle('active', index === targetIndex);
+  });
+  currentSeriesIndex = targetIndex;
+}
+
+function startCarousel() {
+  // make sure we aren't already running
+  stopCarousel();
+  const tabs = document.querySelectorAll('.series-tab');
+  if (tabs.length <= 1) return; // No point in carousel with only one item
+  
+  carouselInterval = setInterval(() => {
+    currentSeriesIndex = (currentSeriesIndex + 1) % tabs.length;
+    const tab = tabs[currentSeriesIndex];
+    
+    setActiveTab(currentSeriesIndex);
+    renderSeriesCard(tab);
+  }, 7000); // 7 seconds
+}
+
+function stopCarousel() {
+  // clear the running automatic interval
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+    carouselInterval = null;
+    console.log('Featured Series: Carousel stopped');
+  }
+  // also cancel any pending restart timer
+  if (restartTimer) {
+    clearTimeout(restartTimer);
+    restartTimer = null;
+    console.log('Featured Series: Restart timer cleared');
+  }
+}
+
+function restartCarousel() {
+  // stop any existing run and schedule a new start after inactivity
+  stopCarousel();
+  restartTimer = setTimeout(() => {
+    startCarousel();
+    restartTimer = null;
+  }, 7000); // Restart after 7 seconds of inactivity
+}
+
+// Initialize tab switching
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.series-tab');
+  
+  // Add click handlers to existing tabs
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Stop carousel when user interacts
+      stopCarousel();
+      
+      setActiveTab(index);
+      renderSeriesCard(tab);
+      
+      // Restart carousel after user interaction
+      restartCarousel();
+    });
+  });
+  
+  // Start the automatic carousel
+  startCarousel();
+});
+</script>

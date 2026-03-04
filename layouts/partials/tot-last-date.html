@@ -1,0 +1,9 @@
+{{/* Returns the last tot date string from a thread's raw content.
+     Usage: {{ partial "tot-last-date" .RawContent }}
+     Returns a time.Time object parsed from the last date="..." in the content. */}}
+{{- $dates := findRE `date="([^"]+)"` . }}
+{{- $lastDateStr := "" }}
+{{- range $dates }}
+  {{- $lastDateStr = replaceRE `date="([^"]+)"` "$1" . }}
+{{- end }}
+{{- return (time $lastDateStr) }}

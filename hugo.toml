@@ -1,0 +1,192 @@
+baseURL = 'https://grantsform.github.io/'
+languageCode = 'en-us'
+title = "GRANT'S FORM - Dilutions Of Grant'ur"
+publishDir = "../grantsform.github.io"
+
+
+[params]
+  description = "GRANT'S FORM - Dilutions Of Grant'eur."
+  author = "Joshua Steven Grant (ie: Jost Grant)"
+  keywords = "LISP, Godot, Devlog, Life"
+  
+  # Featured Video Configuration
+  [params.featuredVideo]
+    title = "Intro Vid"
+    placeholder = "[ P L A C E H O L D E R ]"
+    embedUrl = "https://www.youtube.com/embed/bmpz3-3x9a4?autoplay=1&controls=0&mute=1&rel=0&modestbranding=1&showinfo=0"
+  
+  # Support Configuration
+  [params.support]
+    title = "Support Grantsform"
+    description = "Interested / Excited What We're Doing Here?"
+    subscribeUrl = "https://github.com/sponsors/grantsform"
+  
+  # Showcase Carousel
+  [params.showcase]
+    title = "Showcase"
+    autoplayMs = 5000
+
+    [[params.showcase.items]]
+      title = "Metropolisp"
+      subtitle = "The Connected Lisp-Machine"
+      description = "A live, connected Lisp-Machine environment — the backbone project powering everything else."
+      image = "/img/projects/proj-metropolisp.webp"
+      url = "https://github.com/metropolisp"
+      buttonText = "Explore"
+      badge = "Flagship"
+
+    [[params.showcase.items]]
+      title = "Clark-Lang"
+      subtitle = "Meta-Lisp Superset"
+      description = "A meta-lisp implementation and superset language built on Common Lisp foundations."
+      image = "/img/projects/proj-clark-lang.webp"
+      url = "https://github.com/metropolisp/clark-lang"
+      buttonText = "View Repo"
+      badge = "Language"
+
+    [[params.showcase.items]]
+      title = "Lith Lang"
+      subtitle = "A New Kind-Of Lisp"
+      description = "Standardization project aimed at forging a new kind-of, kinda Lisp for the modern era."
+      image = "/img/projects/proj-lith-lang.webp"
+      url = "https://github.com/lith-lang"
+      buttonText = "Learn More"
+      badge = "Spec"
+
+    [[params.showcase.items]]
+      title = "Homebase"
+      subtitle = "Server-Side Web Framework"
+      description = "The server-side web framework that powers the Metropolisp ecosystem and its connected services."
+      image = "/img/projects/proj-homebase.webp"
+      url = "https://github.com/metropolisp/homebase"
+      buttonText = "Check It Out"
+      badge = "Framework"
+
+    
+    [[params.support.buttons]]
+      prefix = "Follow Grant:"
+      suffix = "X.com"
+      url = "https://x.com/grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Watch Grant:"
+      suffix = "Youtube"
+      url = "https://youtube.com/@grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Stream Grant:"
+      suffix = "Twitch"
+      url = "https://twitch.tv/grantsform"
+
+    [[params.support.buttons]]
+      prefix = "Talk2 Grant:"
+      suffix = "Stoat"
+      url = "https://stoat.chat/#"
+    
+    [[params.support.buttons]]
+      prefix = "Fork Grant:"
+      suffix = "GitHub"
+      url = "https://github.com/grantsform"
+    
+    [[params.support.buttons]]
+      prefix = "Fund Grant:"
+      suffix = "Patreon"
+      url = "https://patreon.com/grantsform"
+  
+  # Featured Projects
+
+  [[params.featuredProjects]]
+    title = "Metropolisp"
+    description = "The Connected, Live'able Lisp-Machine Env Project / Body."
+    url = "https://github.com/metropolisp"
+    buttonText = "View"
+    image = "/proj-metropolisp.webp"
+
+  [[params.featuredProjects]]
+    title = "Homebase"
+    description = "Server-Side Webframework That Powers The Metropolisp"
+    url = "https://github.com/metropolisp/homebase"
+    buttonText = "View"
+    image = "/proj-homebase.webp"    
+
+  [[params.featuredProjects]]
+    title = "Clark-Lang"
+    description = "Meta-Lisp Implementation / Superset Built On Common-Lisp."
+    url = "https://github.com/metropolisp/clark-lang"
+    buttonText = "View"
+    image = "/proj-clark-lang.webp"
+
+  [[params.featuredProjects]]
+    title = "Lith 'Lang"
+    description = "Standarization Project Aimed At A New Kind-Of / Kinda Lisp."
+    url = "https://github.com/lith-lang"
+    buttonText = "View"
+    image = "/proj-lith-lang.webp"
+    
+
+  # Also Working On Projects
+
+  [[params.alsoWorkingOn]]
+    title = "Consmic"
+    description = "Thread Based Chat Application For Metropolisp"
+    url = "https://github.com/metropolisp/consmic"
+    buttonText = "View"
+    image = "/proj-consmic.webp"
+
+  [[params.alsoWorkingOn]]
+    title = "Forktress"
+    description = "Source  / Session Management Software For Clark."
+    url = "https://github.com/metropolisp/forktress"
+    buttonText = "View"
+    image = "/proj-forktress.webp"
+    
+    
+
+[menu]
+  [[menu.main]]
+    name = "Canon/"
+    url = "https://grantsform.github.io/grantcanon/"
+    weight = 1
+  [[menu.main]]
+    name = "Vaults/"
+    url = "https://grantsform.github.io/vaults/"
+    weight = 2
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 3
+  [[menu.main]]
+    name = "Projects"
+    url = "/projects/"
+    weight = 4
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 5
+  [[menu.main]]
+    name = "Series"
+    url = "/series/"
+    weight = 6
+  [[menu.main]]
+    name = "Tots 🗨"
+    url = "/tots/"
+    weight = 7
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "github-dark"
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+

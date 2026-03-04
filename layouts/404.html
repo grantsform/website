@@ -1,0 +1,247 @@
+{{ define "main" }}
+<style>
+  /* Ocean theme for 404 page */
+  .error-content {
+    padding: 2rem 0;
+    position: relative;
+    z-index: 10;
+  }
+  .error-content article {
+    padding: 2rem;
+    color: #e0f7fa;
+  }
+  .error-content h1, .error-content h2 {
+    color: #ffd54f;
+  }
+  .error-content .lead {
+    color: #b3e5fc;
+  }
+  .error-content a {
+    color: #64b5f6;
+  }
+  .error-content a:hover {
+    color: #4dd0e1;
+  }
+  
+  /* Circular wave card */
+  .wave-circle-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 0 auto;
+  }
+  .wave-circle {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(180deg, #f5e6d3 0%, #e8d4bc 100%);
+    box-shadow: 0 4px 24px rgba(10, 22, 40, 0.6), inset 0 0 30px rgba(139, 119, 101, 0.2);
+  }
+  .wave-circle-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  .wave-circle-content h5 {
+    color: #1565c0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  .wave-circle-content ul {
+    list-style: none !important;
+    list-style-type: none !important;
+    padding: 0;
+    padding-left: 0 !important;
+    margin: 0;
+    width: 100%;
+  }
+  .wave-circle-content li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #5d4037;
+    list-style: none !important;
+    display: flex;
+    align-items: center;
+  }
+  .wave-circle-content li i {
+    color: #2e7d32 !important;
+    width: 20px;
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .wave-circle-content li a {
+    flex: 1;
+    text-align: center;
+    padding-right: 40px;
+  }
+  .wave-circle-content a {
+    color: #5d4037;
+    text-decoration: none;
+  }
+  .wave-circle-content a:hover {
+    color: #3e2723;
+    text-decoration: underline;
+  }
+  
+  /* Circular waves around the whole circle */
+  .circle-waves {
+    position: absolute;
+    inset: -15px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .circle-wave-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(77, 208, 225, 0.5);
+    animation: waveRing 8s ease-in-out infinite;
+  }
+  .circle-wave-ring:nth-child(1) {
+    inset: 12px;
+    border-color: rgba(255, 255, 255, 0.6);
+    animation-delay: 0s;
+  }
+  .circle-wave-ring:nth-child(2) {
+    inset: 5px;
+    border-color: rgba(77, 208, 225, 0.5);
+    animation-delay: -2.5s;
+  }
+  .circle-wave-ring:nth-child(3) {
+    inset: -2px;
+    border-color: rgba(33, 150, 243, 0.4);
+    animation-delay: -5s;
+  }
+  
+  @keyframes waveRing {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scale(1.03);
+      opacity: 1;
+    }
+  }
+  
+  /* Glow effect for 404 */
+  .display-1 {
+    font-weight: 900;
+    text-shadow: 0 0 30px rgba(255, 213, 79, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 20px rgba(255, 213, 79, 0.5);
+    }
+    to {
+      text-shadow: 0 0 40px rgba(255, 213, 79, 0.8);
+    }
+  }
+  
+  /* Buttons */
+  .error-content .btn-primary {
+    background-color: #ffd54f;
+    border-color: #ffd54f;
+    color: #1a237e;
+    font-weight: 600;
+  }
+  .error-content .btn-primary:hover {
+    background-color: #ffeb3b;
+    border-color: #ffeb3b;
+    color: #1a237e;
+  }
+  .error-content .btn-outline-secondary {
+    border-color: #ffd54f;
+    color: #ffd54f;
+  }
+  .error-content .btn-outline-secondary:hover {
+    background-color: #ffd54f;
+    border-color: #ffd54f;
+    color: #1a237e;
+  }
+  
+  /* Icon color */
+  .error-content .text-orange-500 {
+    color: #ffd54f !important;
+  }
+  
+  /* Explorer message */
+  .explorer-message {
+    color: #b3e5fc;
+    font-style: italic;
+  }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 error-content">
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <article class="text-center">
+        <div class="content">
+          <div class="mb-5">
+            <h1 class="display-1 mb-3" style="font-size: 8rem;">404</h1>
+            <h2 class="mb-3">Page Not Found</h2>
+            <p class="lead mb-4">The page you're looking for doesn't exist or has been moved.</p>
+          </div>
+          
+          <div class="mb-5">
+            <div class="wave-circle-container">
+              <div class="circle-waves">
+                <div class="circle-wave-ring"></div>
+                <div class="circle-wave-ring"></div>
+                <div class="circle-wave-ring"></div>
+              </div>
+              <div class="wave-circle">
+                <div class="wave-circle-content">
+                  <h5>What can you do?</h5>
+                  <ul>
+                    <li>
+                      <i class="fa-solid fa-house me-2" style="color: #2e7d32;"></i>
+                      <a href="{{ "/" | relURL }}">Going Back Home</a>
+                    </li>
+                    <li>
+                      <i class="fa-solid fa-folder me-2" style="color: #2e7d32;"></i>
+                      <a href="{{ "/posts/" | relURL }}">Browse all posts</a>
+                    </li>
+                    <li>
+                      <i class="fa-solid fa-tags me-2" style="color: #2e7d32;"></i>
+                      <a href="{{ "/tags/" | relURL }}">Explore by tags</a>
+                    </li>
+                    <li>
+                      <i class="fa-solid fa-user me-2" style="color: #2e7d32;"></i>
+                      <a href="{{ "/about/" | relURL }}">Learn about Grant</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <p class="explorer-message">
+              <i class="fa-solid fa-umbrella-beach text-orange-500 me-2"></i>
+              Lost In-A Sea-Of Parentheses?<br>Even the best navigators need a compass.
+            </p>
+          </div>
+          
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ "/" | relURL }}" class="btn btn-primary">
+              <i class="fa-solid fa-home me-2"></i>Take Me Home
+            </a>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-arrow-left me-2"></i>Go Back
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+{{ end }}

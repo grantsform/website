@@ -1,0 +1,109 @@
+{{ define "main" }}
+<style>
+.tot-single-page { position: relative; z-index: 10; }
+.tot-thread-full { max-width: 640px; margin: 0 auto; }
+
+.tot-thread-header { color: #ffd54f; margin-bottom: 1rem; }
+.tot-thread-header h1 { font-size: 1.4rem; }
+.tot-thread-header .back-link {
+  color: #64b5f6; text-decoration: none; font-size: 0.9rem;
+}
+.tot-thread-header .back-link:hover { color: #ffd54f; }
+
+.tot-thread-desc { color: rgba(224,240,255,0.6); margin-top: 0.35rem; }
+
+/* In full thread view, show all tots with thread styling */
+.tot-thread-full .tot-thread-posts .tot-post {
+  background: linear-gradient(180deg, #0d2137, #1a3a5c);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #e0f0ff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.tot-thread-full .tot-thread-posts .tot-post:first-child {
+  border-color: rgba(33,150,243,0.35);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  border-left: 3px solid #ffd54f;
+  padding-left: 1rem;
+}
+.tot-thread-full .tot-thread-posts .tot-post ~ .tot-post {
+  margin-left: 1.5rem;
+  border-left: none;
+  padding-left: 0.75rem;
+}
+
+.tot-post-body {
+  color: #e0f0ff; line-height: 1.6; word-wrap: break-word;
+}
+.tot-post-body p { margin: 0 0 0.5rem 0; }
+.tot-post-body p:last-child { margin-bottom: 0; }
+
+.tot-date {
+  display: block;
+  color: rgba(100,181,246,0.7);
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.tot-thread-divider {
+  text-align: center;
+  color: rgba(100,181,246,0.4);
+  font-size: 0.8rem;
+  margin: 0.25rem 0 0.75rem 0;
+  position: relative;
+}
+.tot-thread-divider::before, .tot-thread-divider::after {
+  content: ''; position: absolute; top: 50%; width: 30%; height: 1px;
+  background: rgba(33,150,243,0.2);
+}
+.tot-thread-divider::before { left: 0; }
+.tot-thread-divider::after { right: 0; }
+
+.post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+.post-tag { background: rgba(33, 150, 243, 0.2); color: #64b5f6; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; text-decoration: none; }
+.post-tag:hover { background: rgba(33, 150, 243, 0.35); }
+
+.tot-gag { color: rgba(224,240,255,0.45); text-align: center; font-size: 0.9rem; margin: 0.4rem 0 0.6rem 0; }
+</style>
+
+<div class="w-9/10 max-w-7xl mx-auto px-4 tot-single-page">
+  <div class="tot-thread-full">
+    <div class="tot-thread-header">
+      <a href="{{ "/tots/" | relURL }}" class="back-link"><i class="fas fa-arrow-left"></i> All Tots</a>
+      <h1>{{ with .Params.name }}{{ . }}{{ else }}{{ .Title }}{{ end }}</h1>
+      {{ with .Params.desc }}<p class="tot-thread-desc">{{ . }}</p>{{ end }}
+    </div>
+    {{- /* Tags: extract hashtags from raw content and merge with front-matter tags */ -}}
+    {{- $bodyTags := slice }}
+    {{- range findRE `#[a-zA-Z][a-zA-Z0-9_]+` .RawContent }}
+      {{- $tag := strings.TrimPrefix "#" . }}
+      {{- $bodyTags = $bodyTags | append $tag }}
+    {{- end }}
+    {{- $fmTags := .Params.tags | default slice }}
+    {{- $allTags := $fmTags }}
+    {{- range $bodyTags }}
+      {{- if not (in $allTags .) }}
+        {{- $allTags = $allTags | append . }}
+      {{- end }}
+    {{- end }}
+    {{- if $allTags }}
+    <div class="post-tags">
+      {{- range $allTags }}
+      <a href="{{ "/tots/?tag=" }}{{ . | urlize }}" class="post-tag">#{{ . }}</a>
+      {{- end }}
+    </div>
+      <div class="tot-gag"></div>
+    {{- end }}
+
+    {{- $totCount := len (findRE `\{%\s*tot\s` .RawContent) }}
+
+    {{ .Content }}
+
+    {{- if gt $totCount 1 }}
+    <div class="tot-thread-divider">{{ $totCount }} posts in thread</div>
+    {{- end }}
+  </div>
+</div>
+{{ end }}

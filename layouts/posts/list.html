@@ -1,0 +1,100 @@
+{{ define "main" }}
+<style>
+.posts-page { position: relative; z-index: 10; }
+.posts-page h1 { color: #ffd54f; }
+.posts-page .lead { color: #e0f7fa; }
+.posts-page h2 { color: #ffd54f; }
+.posts-page .card { background: linear-gradient(180deg, #0a1628, #1e3a5f); border: 1px solid rgba(33,150,243,0.3); color: #e0f7fa; }
+.posts-page .card-title a { color: #64b5f6; }
+.posts-page .card-title a:hover { color: #ffd54f; }
+.posts-page .card-text { color: rgba(224,247,250,0.85); }
+.posts-page .text-muted { color: rgba(100,181,246,0.7) !important; }
+.posts-page .badge.bg-primary { background: rgba(33,150,243,0.3) !important; color: #4dd0e1; }
+.posts-page .card.border-warning { border-color: #ffd54f !important; }
+.posts-page .badge.bg-warning { background: #ffd54f !important; color: #0a1628 !important; }
+.posts-page .badge.bg-secondary { background: rgba(33,150,243,0.2) !important; color: #64b5f6; }
+.posts-page .text-warning { color: #ffd54f !important; }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 posts-page">
+  <div class="row">
+    <div class="col-12">
+      <header class="mb-4">
+        <h1>{{ .Title }}</h1>
+        <p class="lead">Latest blog posts and articles</p>
+      </header>
+      
+      {{- $publishedPosts := where .Pages "Draft" false }}
+      {{- $draftPosts := where .Pages "Draft" true }}
+      
+      {{- if $publishedPosts }}
+      <section class="mb-5">
+        <h2 class="h3 mb-3">Published Posts</h2>
+        <div class="row">
+          {{- range $publishedPosts }}
+          <div class="col-lg-6 mb-4">
+            <article class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><a href="{{ .RelPermalink }}" class="text-decoration-none">{{ .Title }}</a></h5>
+                <div class="text-muted small mb-2">
+                  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                  {{- if .Params.author }} • {{ .Params.author }}{{- end }}
+                </div>
+                {{- if .Summary }}
+                <p class="card-text">{{ .Summary }}</p>
+                {{- end }}
+                {{- if .Params.tags }}
+                <div class="mt-auto">
+                  {{- range first 4 .Params.tags }}
+                  <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="badge bg-primary text-decoration-none me-1">{{ . }}</a>
+                  {{- end }}
+                </div>
+                {{- end }}
+              </div>
+            </article>
+          </div>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+      
+      {{- if $draftPosts }}
+      <section class="mb-5">
+        <h2 class="h3 mb-3">Draft Posts <span class="badge bg-warning text-dark">Drafts</span></h2>
+        <div class="row">
+          {{- range $draftPosts }}
+          <div class="col-lg-6 mb-4">
+            <article class="card h-100 border-warning">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">
+                  <a href="{{ .RelPermalink }}" class="text-decoration-none">{{ .Title }}</a>
+                  <small class="text-warning ms-2">[DRAFT]</small>
+                </h5>
+                <div class="text-muted small mb-2">
+                  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                  {{- if .Params.author }} • {{ .Params.author }}{{- end }}
+                </div>
+                {{- if .Summary }}
+                <p class="card-text">{{ .Summary }}</p>
+                {{- end }}
+                {{- if .Params.tags }}
+                <div class="mt-auto">
+                  {{- range first 4 .Params.tags }}
+                  <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="badge bg-secondary text-decoration-none me-1">{{ . }}</a>
+                  {{- end }}
+                </div>
+                {{- end }}
+              </div>
+            </article>
+          </div>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+      
+      {{- if not $publishedPosts }}{{- if not $draftPosts }}
+      <p>No posts found.</p>
+      {{- end }}{{- end }}
+    </div>
+  </div>
+</div>
+{{ end }}

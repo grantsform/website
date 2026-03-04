@@ -1,0 +1,101 @@
+<style>
+/* Desktop layout: sidebar overlays inside the graph container */
+#mindmap-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#mindmap-container {
+  position: relative;
+  height: 700px;
+  overflow-x: hidden;
+}
+
+#mindmap-graph {
+  height: 100%;
+  position: relative;
+  border: 1px solid rgba(33,150,243,0.3);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.8);
+  width: 120%;
+}
+
+#right-sidebar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 320px;
+  height: 680px;
+  padding: 1rem;
+  border: 1px solid rgba(33,150,243,0.3);
+  border-radius: 1rem;
+  background: rgba(10, 22, 40, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  overflow-y: auto;
+}
+
+/* Mobile layout: sidebar becomes a card below the graph */
+@media (max-width: 768px) {
+  #mindmap-container {
+    height: auto;
+  }
+  #mindmap-graph {
+    height: 350px;
+  }
+  #right-sidebar {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin-top: 1rem;
+    right: auto;
+    top: auto;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: rgba(10, 22, 40, 0.85);
+  }
+  #sidebar-content {
+    max-height: none !important;
+  }
+  /* Move sidebar out of graph container on mobile via JS */
+}
+</style>
+  <h2>What Inspires Me</h2>
+  <div id="search-container" style="margin-top: 1rem; margin-bottom: 1rem; position: relative;">
+    <input type="text" id="search-input" placeholder="Search nodes..." style="width: 100%; padding: 5px; background: rgba(10, 22, 40, 0.8); border: 1px solid rgba(33,150,243,0.3); border-radius: 4px; color: #e0e0e0;">
+    <button id="clear-search" style="position: absolute; right: 5px; top: 5px; background: none; border: none; color: #64b5f6; cursor: pointer; font-size: 1.2em;">×</button>
+  </div>
+  <div id="mindmap-wrapper">
+    <div id="mindmap-container">
+      <div id="mindmap-graph"></div>
+      <div id="right-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(33,150,243,0.3); padding-bottom: 0.5rem;">
+          <h3 style="color: #ffd54f; margin: 0; font-size: 1.1rem;">Informs</h3>
+          <button id="toggle-sidebar" style="background: none; border: none; color: #64b5f6; cursor: pointer; font-size: 1.2em;">−</button>
+        </div>
+        <div id="sidebar-content">
+          <div id="active-node-description" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h3 style="color: #ffd54f; margin: 0; font-size: 1rem;">Active Node</h3>
+              <button id="toggle-active" style="background: none; border: none; color: #64b5f6; cursor: pointer; font-size: 1.2em;">−</button>
+            </div>
+            <div id="active-node-content">
+              <p id="active-desc-text" style="color: #e0e0e0; font-size: 0.9rem;">Click a node to select it and see its description.</p>
+              <div id="active-node-links" style="margin-top: 1rem;"></div>
+            </div>
+          </div>
+          <div id="clusters-list">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h3 style="color: #ffd54f; margin: 0; font-size: 1rem;">Clusters</h3>
+              <button id="toggle-clusters" style="background: none; border: none; color: #64b5f6; cursor: pointer; font-size: 1.2em;">−</button>
+            </div>
+            <div id="clusters-content">
+              <ul id="clusters-ul" style="color: #e0e0e0; list-style: none; padding: 0; font-size: 0.85rem;"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/js/mindmap.js?v={{ now.Unix }}"></script>

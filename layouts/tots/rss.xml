@@ -1,0 +1,44 @@
+{{- $threads := where .Pages "Draft" false -}}
+{{- $sorted := slice -}}
+{{- range $threads -}}
+  {{- $lastDate := partial "tot-last-date" .RawContent -}}
+  {{- $sorted = $sorted | append (dict "page" . "lastDate" $lastDate) -}}
+{{- end -}}
+{{- $sorted = sort $sorted "lastDate" "desc" -}}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>{{ .Site.Title }} — Tots</title>
+    <link>{{ .Permalink }}</link>
+    <description>A stream of self-contained thoughts from {{ .Site.Title }}</description>
+    <language>{{ .Site.LanguageCode }}</language>
+    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
+    <atom:link href="{{ .Permalink }}index.xml" rel="self" type="application/rss+xml" />
+    {{- range $sorted }}
+    {{- $thread := .page }}
+    {{- $lastDate := .lastDate }}
+    <item>
+      <title>{{ $thread.Title }}</title>
+      <link>{{ $thread.Permalink }}</link>
+      <pubDate>{{ $lastDate.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
+      <guid>{{ $thread.Permalink }}</guid>
+      <dc:creator>{{ $.Site.Params.author }}</dc:creator>
+      {{- $bodyTags := slice }}
+      {{- range findRE `#[a-zA-Z][a-zA-Z0-9_]+` $thread.RawContent }}
+        {{- $tag := strings.TrimPrefix "#" . }}
+        {{- $bodyTags = $bodyTags | append $tag }}
+      {{- end }}
+      {{- $fmTags := $thread.Params.tags | default slice }}
+      {{- $allTags := $fmTags }}
+      {{- range $bodyTags }}
+        {{- if not (in $allTags .) }}
+          {{- $allTags = $allTags | append . }}
+        {{- end }}
+      {{- end }}
+      {{- range $allTags }}
+      <category>{{ . }}</category>
+      {{- end }}
+      <description>{{ printf "<![CDATA[%s]]>" $thread.Content | safeHTML }}</description>
+    </item>
+    {{- end }}
+  </channel>
+</rss>

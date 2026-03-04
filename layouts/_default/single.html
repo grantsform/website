@@ -1,0 +1,56 @@
+{{ define "main" }}
+<style>
+.single-post-wrapper { position: relative; z-index: 10; }
+.post-article {
+  background: linear-gradient(180deg, #0a1628, #1e3a5f);
+  border: 1px solid rgba(33,150,243,0.3);
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem 0;
+  color: #e0f7fa;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+.post-article h1 { color: #ffd54f; }
+.post-article .text-muted { color: rgba(100,181,246,0.7) !important; }
+.post-article .badge.bg-primary { background: rgba(33,150,243,0.3) !important; color: #4dd0e1; }
+.post-article .content { color: #e0f7fa; }
+.post-article .content h2, .post-article .content h3, .post-article .content h4 { color: #64b5f6; }
+.post-article .content a { color: #4dd0e1; }
+.post-article .content a:hover { color: #ffd54f; }
+.post-article .content code { background: rgba(33,150,243,0.2); color: #4dd0e1; padding: 0.1em 0.3em; border-radius: 3px; }
+.post-article .content pre { background: rgba(10,22,40,0.8); border: 1px solid rgba(33,150,243,0.3); border-radius: 6px; padding: 1rem; overflow-x: auto; }
+.post-article .content pre code { background: transparent; padding: 0; }
+.post-article .content blockquote { border-left: 4px solid #ffd54f; padding-left: 1rem; color: rgba(224,247,250,0.85); background: rgba(33,150,243,0.1); margin: 1rem 0; padding: 0.5rem 1rem; border-radius: 0 6px 6px 0; }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 single-post-wrapper">
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <article class="post-article">
+        <header class="mb-4">
+          <h1>{{ .Title }}</h1>
+          {{- if .Date }}
+          <div class="text-muted mb-2">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ if .Date }}{{ .Date.Format "January 2, 2006" }}{{ else }}September 19, 2025{{ end }}</time>
+            {{- if .Params.author }} • {{ .Params.author }}{{- end }}
+          </div>
+          {{- else }}
+          <div class="text-muted mb-2">
+            <time>September 19, 2025</time>
+          </div>
+          {{- end }}
+          {{- if .Params.tags }}
+          <div class="mb-3">
+            {{- range .Params.tags }}
+            <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="badge bg-primary text-decoration-none me-1">{{ . }}</a>
+            {{- end }}
+          </div>
+          {{- end }}
+        </header>
+        <div class="content">
+          {{ .Content }}
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+{{ end }}

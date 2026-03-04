@@ -1,0 +1,49 @@
+[
+    {
+        "title": "@GRANTSFORM",
+        "repos": [
+                    {
+                        "owner": "grantsform",
+                        "repo": "dotfiles",
+                        "quip": "Dot Dot Dot",
+                        "desc": "Personal config files, scripts, settings, state, etc, etc.."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "ations",
+                        "quip": "Grant's Automations, Actions, And Apps; Stuff That Doesn't Fit Elsewhere.",
+                        "desc": "Automations, actions, and apps that don't fit elsewhere."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "grantios",
+                        "quip": "Big Enough Idea(s) To Seperate From My Dotfiles.",
+                        "desc": "Meta-Distros Of My FreeBSD, and Linux (Arch x Debian) Usecase."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "libeform",
+                        "quip": "Pronounced Similar To `Life Form` (But With Buh Sound).",
+                        "desc": "Grantsform's extended standard library for Common-Lisp, personal utils focused."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "progrants",
+                        "quip": "Collection Of Grant's Misc Programs",
+                        "desc": "Stuff that don't really fit elsewhere."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "obsess",
+                        "quip": "Control OBS From S-Exps.",
+                        "desc": "Cleric Based Way To Control OBS-Studio Using The Websocket Server / Related API."
+                    },
+                    {
+                        "owner": "grantsform",
+                        "repo": "demostream",
+                        "quip": "Showy Stream Layouts And Doodads.",
+                        "desc": "Intended for my stream, remote-controlled Lisp (via CLOG) based Streamer Software."
+                    }
+        ]
+    }
+]

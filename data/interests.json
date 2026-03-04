@@ -1,0 +1,113 @@
+{
+    "coreSkills": [
+        {
+            "name": "Clark-Lang",
+            "level": 85,
+            "url": "https://metropolisp.github.io/clark-lang/"
+        },
+                {
+            "name": "Common-Lisp",
+            "level": 70,
+            "url": "https://lisp-lang.org"
+        },
+        {
+            "name": "Scheme",
+            "level": 50,
+            "url": "https://www.scheme.org"
+        },
+        {
+            "name": "Pharo",
+            "level": 30,
+            "url": "https://pharo.org"
+        },
+        {
+            "name": "Red",
+            "level": 20,
+            "url": "https://www.red-lang.org/"
+        },
+        {
+            "name": "C(++)",
+            "level": 5,
+            "url": "https://www.c-language.org/"
+        }
+    ],
+    "toolbelt": [
+        {
+            "name": "SBCL",
+            "url": "https://github.com/sbcl/sbcl"
+        },
+        {
+            "name": "Bootc",
+            "url": "https://bootc-dev.github.io/bootc/"
+        },
+                {
+            "name": "Podman",
+            "url": "https://podman.io/"
+        }
+    ],
+    "radarData": [
+        {
+            "subject": "Frontend",
+            "value": 70,
+            "angle": 0
+        },
+        {
+            "subject": "AI / ML",
+            "value": 60,
+            "angle": 60
+        },
+        {
+            "subject": "DevOps",
+            "value": 55,
+            "angle": 120
+        },
+        {
+            "subject": "Backend",
+            "value": 60,
+            "angle": 180
+        },
+        {
+            "subject": "DX / Tooling",
+            "value": 80,
+            "angle": 240
+        },
+        {
+            "subject": "UX",
+            "value": 90,
+            "angle": 300
+        }
+    ],
+    "interests": [
+        {
+            "icon": "🌌",
+            "label": "Spatial Computing",
+            "desc": "Moving interfaces from 1.5D to 2.5-3D.",
+            "detail": "ipsumzeta quorbits flenxar veloran quixthra sombrix norvalen"
+        },
+        {
+            "icon": "☯️",
+            "label": "Homoiconclasm",
+            "desc": "Code Is Data. Data Is Code. It's all language.",
+            "detail": "vexalon primetuid sogran ulmora phentrix lodamir tezrin"
+        },
+        {
+            "icon": "♻️",
+            "label": "Distribution",
+            "desc": "Distributed Programming x Data.",
+            "detail": "murpish tevalon crinsta dorvalen spindrek humbar lortha"
+        },
+        {
+            "icon": "🔧",
+            "label": "Modifying",
+            "desc": "Everything should be mo(l)dable.",
+            "detail": "brundel pexario yulb tremorin quastel varnum eldir"
+        }
+    ],
+    "contributing": [
+        {
+            "name": "Coming Soon!",
+            "url": "#",
+            "desc": ". . ."
+        }
+    ]
+}

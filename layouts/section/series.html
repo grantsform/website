@@ -1,0 +1,44 @@
+{{ define "main" }}
+<style>
+.posts-page { position: relative; z-index: 10; }
+.posts-page h1 { color: #ffd54f; }
+.posts-page .lead { color: #e0f7fa; }
+.posts-page h2 { color: #ffd54f; }
+.posts-page .card { background: linear-gradient(180deg, #0a1628, #1e3a5f); border: 1px solid rgba(33,150,243,0.3); color: #e0f7fa; }
+.posts-page .card-title a { color: #64b5f6; }
+.posts-page .card-title a:hover { color: #ffd54f; }
+.posts-page .card-text { color: rgba(224,247,250,0.85); }
+.posts-page .text-muted { color: rgba(100,181,246,0.7) !important; }
+.posts-page .badge.bg-primary { background: rgba(33,150,243,0.3) !important; color: #4dd0e1; }
+.posts-page .card.border-warning { border-color: #ffd54f !important; }
+.posts-page .badge.bg-warning { background: #ffd54f !important; color: #0a1628 !important; }
+.posts-page .badge.bg-secondary { background: rgba(33,150,243,0.2) !important; color: #64b5f6; }
+.posts-page .text-warning { color: #ffd54f !important; }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 posts-page">
+  <div class="row">
+    <div class="col-12">
+      <header class="mb-4">
+        <h1>{{ .Title }}</h1>
+        <p class="lead">Collections of related posts.</p>
+      </header>
+      
+      <div class="row">
+        {{ range .Pages }}
+        <div class="col-lg-6 mb-4">
+          <article class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"><a href="{{ .RelPermalink }}" class="text-decoration-none">{{ .Title }}</a></h5>
+              <p class="card-text">{{ .Description }}</p>
+              <div class="mt-auto">
+                <a href="{{ .RelPermalink }}" class="btn btn-primary btn-sm">Read Series</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

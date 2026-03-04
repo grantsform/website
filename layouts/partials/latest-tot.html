@@ -1,0 +1,186 @@
+{{/* Latest Tot partial — shows newest thread's first tot, with inline expand */}}
+<style>
+.latest-tot-section { margin: 2.5rem 0; }
+.latest-tot-section h2 { color: #ffd54f; margin-bottom: 1rem; }
+.latest-tot-title { text-align: left; }
+.latest-tot-section h2 a { color: #ffd54f; text-decoration: none; }
+.latest-tot-section h2 a:hover { text-decoration: underline; }
+.latest-tot-link { color: #64b5f6; text-decoration: none; }
+.latest-tot-link:hover { color: #ffd54f; }
+
+.tot-embed {
+  width: 100%;
+  max-width: none;
+  background: linear-gradient(180deg, #0d2137, #1a3a5c);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  color: #e0f0ff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.tot-embed:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.tot-thread-header h3 { margin: 0 0 0.35rem 0; color: #ffd54f; font-size: 1.05rem; }
+.tot-thread-desc { color: rgba(224,240,255,0.6); margin: 0 0 0.6rem 0; }
+
+/* Preview: show only first tot-post */
+.tot-embed .tot-thread-posts .tot-post ~ .tot-post { display: none; }
+.tot-embed.expanded .tot-thread-posts .tot-post ~ .tot-post {
+  display: block;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(33,150,243,0.2);
+}
+
+.tot-embed .tot-post-body {
+  color: #e0f0ff; line-height: 1.55; word-wrap: break-word;
+}
+.tot-embed .tot-post-body p { margin: 0 0 0.4rem 0; }
+.tot-embed .tot-post-body p:last-child { margin-bottom: 0; }
+
+.tot-embed .tot-date {
+  display: block;
+  color: rgba(100,181,246,0.7);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.tot-embed .tot-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.tot-embed .tot-tag {
+  background: rgba(33, 150, 243, 0.2);
+  color: #64b5f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+.tot-embed .tot-tag:hover { background: rgba(33, 150, 243, 0.35); }
+
+.tot-gag { color: rgba(224,240,255,0.45); text-align: center; font-size: 0.9rem; margin: 0.35rem 0 0.6rem 0; }
+
+.tot-embed .tot-footer {
+  display: flex; align-items: center; gap: 1rem;
+  margin-top: 0.6rem; padding-top: 0.5rem;
+  border-top: 1px solid rgba(33,150,243,0.15);
+}
+.tot-embed .tot-thread-link {
+  color: #64b5f6; font-size: 0.8rem; text-decoration: none;
+}
+.tot-embed .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.tot-embed .post-tag { background: rgba(33, 150, 243, 0.2); color: #64b5f6; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; text-decoration: none; }
+.tot-embed .post-tag:hover { background: rgba(33, 150, 243, 0.35); }
+
+.tot-expand-btn {
+  background: none;
+  border: 1px solid rgba(33,150,243,0.3);
+  color: #64b5f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tot-expand-btn:hover { background: rgba(33,150,243,0.15); color: #ffd54f; border-color: #ffd54f; }
+
+.view-tots-link {
+  display: inline-block; margin-top: 0.75rem;
+  color: #64b5f6; font-size: 0.85rem; text-decoration: none;
+}
+.view-tots-link:hover { color: #ffd54f; }
+
+/* Match the latest-posts 'View all' button styling */
+.latest-tot-section .btn-space {
+  background: linear-gradient(180deg, #2196f3, #1976d2);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(33,150,243,0.25), inset 0 -2px 4px rgba(0,0,0,0.16);
+}
+.latest-tot-section .btn-space:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #42a5f5, #2196f3);
+}
+
+/* container that visually separates the embed from the footer link */
+.tot-embed-container {
+  display: block;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.latest-tot-footer { text-align: center; margin-top: 0.8rem; }
+</style>
+
+<section class="latest-tot-section">
+  <h2 class="latest-tot-title"><a href="{{ "/tots/" | relURL }}">Latest Tots</a></h2>
+
+  {{/* Find the thread with the most recent last-tot date */}}
+  {{- $threads := where (where .Site.Pages "Type" "tots") "Draft" false }}
+  {{- $threads = where $threads "Kind" "page" }}
+  {{- $sorted := slice }}
+  {{- range $threads }}
+    {{- $lastDate := partial "tot-last-date" .RawContent }}
+    {{- $sorted = $sorted | append (dict "page" . "lastDate" $lastDate) }}
+  {{- end }}
+  {{- $sorted = sort $sorted "lastDate" "desc" }}
+  {{- $latestEntry := index $sorted 0 }}
+  {{- $latest := $latestEntry.page }}
+
+  {{- if $latest }}
+    {{- $totCount := len (findRE `\{%\s*tot\s` $latest.RawContent) }}
+    {{- $replyCount := 0 }}
+    {{- if gt $totCount 1 }}{{ $replyCount = sub $totCount 1 }}{{ end }}
+    <div class="latest-parent">
+      <div class="posts-list">
+        <div class="tot-embed-container">
+          <div class="tot-embed" id="latest-tot-embed">
+            <div class="tot-thread-header">
+              <h3><a href="{{ $latest.Permalink }}" class="latest-tot-link">{{ with $latest.Params.name }}{{ . }}{{ else }}{{ $latest.Title }}{{ end }}</a></h3>
+              {{ with $latest.Params.desc }}<p class="tot-thread-desc">{{ . }}</p>{{ end }}
+            </div>
+
+            {{/* Tags */}}
+      {{- $bodyTags := slice }}
+      {{- range findRE `#[a-zA-Z][a-zA-Z0-9_]+` $latest.RawContent }}
+        {{- $tag := strings.TrimPrefix "#" . }}
+        {{- $bodyTags = $bodyTags | append $tag }}
+      {{- end }}
+      {{- $fmTags := $latest.Params.tags | default slice }}
+      {{- $allTags := $fmTags }}
+      {{- range $bodyTags }}
+        {{- if not (in $allTags .) }}
+          {{- $allTags = $allTags | append . }}
+        {{- end }}
+      {{- end }}
+      {{- if $allTags }}
+      <div class="post-tags">
+        {{- range $allTags }}
+        <a href="{{ "/tots/?tag=" }}{{ . | urlize }}" class="post-tag">#{{ . }}</a>
+        {{- end }}
+      </div>
+        <div class="tot-gag"></div>
+      {{- end }}
+
+            {{ $latest.Content }}
+
+            <div class="tot-footer">
+        {{- if gt $replyCount 0 }}
+        <button class="tot-expand-btn" onclick="var e=document.getElementById('latest-tot-embed'); e.classList.toggle('expanded'); this.textContent=e.classList.contains('expanded')?'Hide thread ({{ add $replyCount 1 }})':'Show thread ({{ add $replyCount 1 }})';">
+          Show thread ({{ add $replyCount 1 }})
+        </button>
+        {{- end }}
+        <a href="{{ $latest.Permalink }}" class="tot-thread-link"><i class="fas fa-link"></i> Permalink</a>
+      </div>
+        </div>
+      </div>
+    </div>
+    <div class="view-all-container">
+      <a href="{{ "/tots/" | relURL }}" class="btn btn-sm btn-space">View all tots</a>
+    </div>
+  {{- end }}
+</section>

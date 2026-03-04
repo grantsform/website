@@ -1,0 +1,180 @@
+<style>
+/* SAIL Navbar Theme Colors */
+.nav-item:hover {
+  color: #ffd54f !important;
+  background-color: transparent !important;
+}
+.active-nav-item {
+  color: #ffd54f !important;
+}
+.social-icon:hover {
+  color: #ffd54f !important;
+}
+.dropdown button:hover {
+  color: #ffd54f !important;
+  background-color: transparent !important;
+}
+.dropdown a:hover {
+  color: #ffd54f !important;
+}
+</style>
+
+<nav class="w-full bg-black border-b border-gray-800 sticky top-0 z-50" style="background: #0a1628 !important; max-width: 100vw; overflow-x: hidden;" role="navigation">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-12">
+      <a href="/" class="flex items-center text-xl font-bold text-white transition-colors font-bold" style="color: #ffd54f !important;">GRANT'S FORM</a>
+      
+      <div class="hidden lg:flex lg:items-center lg:space-x-4">
+        {{ range .Site.Menus.main }}
+        <a href="{{ .URL }}" class="px-3 py-2 text-sm font-medium rounded-md transition-colors nav-item text-gray-300 hover:bg-gray-800 {{ if $.IsMenuCurrent "main" . }}active-nav-item{{ end }}">{{ .Name }}</a>
+        {{ end }}
+        
+        {{ if .Site.Taxonomies.tags }}
+        <div class="relative dropdown">
+          <button class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md transition-colors flex items-center" onclick="toggleDropdown('tags-dropdown')">
+            Tags <span class="ml-1">▼</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg hidden" id="tags-dropdown">
+            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+            <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">{{ $name | title }}</a>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+        
+        <div class="relative dropdown">
+          <button class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md transition-colors flex items-center" onclick="toggleDropdown('sub-dropdown')">
+            Sub <span class="ml-1">▼</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-32 bg-gray-800 border border-gray-700 rounded-md shadow-lg hidden" id="sub-dropdown">
+            <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" href="/posts/index.xml">Posts RSS</a>
+            <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" href="/tots/index.xml">Tots RSS</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- social icons only visible on wide screens; they also appear inside the mobile menu -->
+      <div class="hidden lg:flex lg:items-center lg:space-x-4">
+        <a class="text-gray-300 transition-colors p-2 social-icon" href="https://github.com/grantsform" target="_blank" title="GitHub">
+          <i class="fab fa-github fa-lg"></i>
+        </a>
+        <a class="text-gray-300 transition-colors p-2 social-icon" href="https://github.com/sponsors/grantsform" target="_blank" title="Sponsor">
+          <i class="fas fa-heart fa-lg"></i>
+        </a>
+      </div>
+      
+      <button class="lg:hidden p-2 text-gray-300 transition-colors social-icon" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div class="lg:hidden border-t border-gray-700 hidden" id="mobile-menu">
+    <div class="px-4 py-2 space-y-1">
+      {{ range .Site.Menus.main }}
+      <a class="block px-3 py-2 text-gray-300 rounded-md transition-colors nav-item {{ if $.IsMenuCurrent "main" . }}active-nav-item bg-gray-800{{ end }}" href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+      
+      {{ if .Site.Taxonomies.tags }}
+      <div class="pt-2 border-t border-gray-700 mt-2">
+        <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tags</p>
+        {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+        <a class="block px-3 py-2 text-sm text-gray-400 rounded-md transition-colors nav-item" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">{{ $name | title }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+      
+      <div class="pt-2 border-t border-gray-700 mt-2">
+        <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Subscribe</p>
+        <a class="block px-3 py-2 text-sm text-gray-400 rounded-md transition-colors nav-item" href="/posts/index.xml">Posts RSS</a>
+        <a class="block px-3 py-2 text-gray-300 rounded-md transition-colors nav-item" href="/tots/index.xml">Tots RSS</a>
+      </div>
+      
+      <div class="pt-2 border-t border-gray-700 mt-2 flex space-x-4 px-3 py-2">
+        <a class="text-gray-400 hover:text-yellow-400 transition-colors" href="https://github.com/grantsform" target="_blank" title="GitHub">
+          <i class="fab fa-github fa-lg"></i>
+        </a>
+        <a class="text-gray-400 hover:text-yellow-400 transition-colors" href="https://github.com/sponsors/grantsform" target="_blank" title="Sponsor">
+          <i class="fas fa-heart fa-lg"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+function toggleDropdown(dropdownId) {
+  const dropdown = document.getElementById(dropdownId);
+  // look up the corresponding button each time, because the menu may have been
+  // moved around in the DOM
+  const button = document.querySelector(
+    "button[onclick=\"toggleDropdown('" + dropdownId + "')\"]"
+  );
+
+  // helper to hide & reset a dropdown
+  function closeOne(id) {
+    const el = document.getElementById(id);
+    if (!el || el.classList.contains('hidden')) return;
+    el.classList.add('hidden');
+    // clear positioning styles so when it reopens we recalc from scratch
+    el.style.top = '';
+    el.style.left = '';
+    el.style.position = '';
+  }
+
+  // close all other menus first
+  const allIds = ['tags-dropdown', 'sub-dropdown'];
+  allIds.forEach(id => {
+    if (id !== dropdownId) closeOne(id);
+  });
+
+  if (dropdown.classList.contains('hidden')) {
+    // opening
+    if (!dropdown._moved) {
+      document.body.appendChild(dropdown);
+      dropdown._moved = true;
+    }
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = rect.bottom + 'px';
+      dropdown.style.left = rect.left + 'px';
+      dropdown.style.zIndex = '2147483647';
+    }
+    dropdown.classList.remove('hidden');
+  } else {
+    // closing itself
+    closeOne(dropdownId);
+  }
+}
+
+function toggleMobileMenu() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileMenu.classList.toggle('hidden');
+}
+
+// Close dropdowns when clicking outside
+// we may have moved menus to <body>, so search by id attribute instead
+const dropdownIds = ['tags-dropdown', 'sub-dropdown'];
+document.addEventListener('click', function(event) {
+  dropdownIds.forEach(id => {
+    const menu = document.getElementById(id);
+    if (!menu) return;
+    // if click target is outside both the menu and its button, close it
+    const button = document.querySelector("button[onclick=\"toggleDropdown('"+id+"')\"]");
+    if (menu.contains(event.target) || (button && button.contains(event.target))) {
+      return;
+    }
+    menu.classList.add('hidden');
+  });
+});
+
+// Close mobile menu when window is resized to desktop
+window.addEventListener('resize', function() {
+  if (window.innerWidth >= 768) {
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenu.classList.add('hidden');
+  }
+});
+</script>

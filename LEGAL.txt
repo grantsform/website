@@ -1,0 +1,21 @@
+This Repo Is Under The CC-BY 4.x License,
+Unless Explicitly Stated Otherwise And/Or
+Unless Said Content Does Not Originate From 
+Joshua Steven Grant (ie: Jost Grant).
+
+~= Exceptions =~
+Icons in static/img/brands are not owned by
+me and please do your own research about how
+they are licensed before using them for anything.
+
+We are currently just using it for stoatchat.svg,
+as workaround for (hopefully just atm) there not
+being a fontawesome version of the brand so we're
+shipping a version off their login page, since
+I can't find any brand guidelines as-of Feb 2026.
+
+Note: the SVG's fill has been adjusted to the site
+footer brown (#5d4037) so it matches other icons.
+
+--
+

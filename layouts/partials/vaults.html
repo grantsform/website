@@ -1,0 +1,57 @@
+<style>
+.vaults { padding: 1rem 1.2rem; }
+.vaults .layout { display: flex; flex-direction: column; align-items: center; width: 100%; margin: 0 auto; }
+.vaults-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem; width: 100%; align-items: stretch; }
+.vault-card { box-sizing: border-box; flex: 1 0 100px; max-width: 160px; min-width: 100px; height: 130px; margin-bottom: 1.2rem; background: transparent; border: 2px dashed #ffd54f; outline: none; color: #ffffff; padding: 1rem; border-radius: 10px; box-shadow: none; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.vault-card h4 { margin: 0.5rem 0 0.25rem; color: #ffd54f; }
+.vault-card p { margin: 0.25rem 0 0; }
+.vault-emoji { font-size: 1.6rem; transition: filter 0.2s ease; }
+.vault-emoji-orange-lambda { color: #ff9800; font-weight: bold; font-size: 2rem; }
+.vault-card:hover .vault-emoji { filter: brightness(0) invert(1); }
+.vault-card a { color: #ffd54f; text-decoration: none; font-weight: 600; }
+.vault-card a:hover { text-decoration: underline; }
+.vault-ellipsis { position: absolute; top: 8px; right: 10px; color: #ffffff; background: transparent; border: none; font-size: 1.2rem; line-height: 1; text-decoration: none; padding: 0.1rem 0.3rem; border-radius: 4px; opacity: 0.95; }
+.vault-ellipsis:hover { color: var(--primary); text-decoration: none; }
+.vault-desc { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(6px); background: rgba(245,230,211,0.98); color: #1a237e; padding: 0.5rem 0.9rem; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: opacity 160ms ease, transform 160ms ease; width: max-content; max-width: min(360px, 90vw); box-sizing: border-box; text-align: center; font-size: 0.95rem; line-height: 1.25; z-index: 40; border: 1px dashed #ffd54f; }
+.vault-card:hover .vault-desc { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.vault-card:hover { border-color: #ffffff; }
+.vault-card:hover h4, .vault-card:hover h4 a, .vault-card:hover a { color: #ffffff; }
+.vaults-wheel-link { display: inline-flex; align-items: center; justify-content: center; width: 3.6rem; height: 3.6rem; padding: 0; border-radius: 50%; transition: background-color 0.2s ease; }
+.vaults-wheel-link:hover { background-color: #ffd54f; animation: spin 6s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+
+{{ $vaults := slice 
+  (dict "emoji" "🌊" "name" "Island" "url" "https://grantsform.github.io/vaults/island/index.html" "desc" "Random Thoughts And Idea Fragments.")
+  (dict "emoji" "🪨" "name" "Henge" "url" "https://grantsform.github.io/vaults/henge/index.html" "desc" "The Living-Document For The Lith Language.")
+  (dict "emoji" "🐉" "name" "Prime" "url" "https://grantsform.github.io/vaults/prime/index.html" "desc" "Looking Back To The Past; To Move Forwards.")
+  (dict "emoji" "λ" "name" "Machina" "url" "https://grantsform.github.io/vaults/machina/index.html" "desc" "What A New Lisp-Machine OS / Env Could Look Like." "orange-lambda" true)
+  (dict "emoji" "💫" "name" "Mensch" "url" "https://grantsform.github.io/vaults/mensch/index.html" "desc" "More Human Language; Made W/ Alien Technology.")
+  (dict "emoji" "🐑" "name" "Onthe" "url" "https://grantsform.github.io/vaults/onthe/index.html" "desc" "On Lisp Exploration And Implementations." )
+  (dict "emoji" "🌪️" "name" "Cortex" "url" "https://grantsform.github.io/vaults/cortex/index.html" "desc" "Whirlwind Of Misc Thought & Opinions.")
+}}
+
+<section class="vaults" style="text-align:center; margin-top:1.5rem;">
+  <div class="layout" style="max-width:100%;">
+    <div style="grid-column:1/-1; text-align:center;">
+      <h2>Vaults</h2>
+      <p class="muted" style="margin-bottom: 1.5rem;">A lot of my writing and thoughts — organized as Obsidian Vaults.</p>
+    </div>
+    <div class="vaults-grid" style="grid-column:1/-1;">
+      {{ range $vaults }}
+      <div class="vault-card">
+        <div class="vault-emoji{{ if (index . "orange-lambda") }} vault-emoji-orange-lambda{{ end }}">{{ .emoji }}</div>
+        <div style="display:flex;align-items:center;gap:0.4em;">
+          <h4 style="margin:0;">
+            <a href="{{ .url }}">{{ .name }}</a>
+          </h4>
+        </div>
+        <div class="vault-desc">{{ .desc }}</div>
+      </div>
+      {{ end }}
+    </div>
+    <div style="margin-top: 1.5rem; text-align: center;">
+      <a href="https://grantsform.github.io/vaults/" class="vaults-wheel-link" style="font-size: 2rem; text-decoration: none;" title="View All Vaults">🛞</a>
+    </div>
+  </div>
+</section>

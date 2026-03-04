@@ -1,0 +1,45 @@
+{{ define "main" }}
+<style>
+.tags-page { position: relative; z-index: 10; }
+.tags-page h1 { color: #ffd54f; }
+.tags-page .lead { color: #e0f7fa; }
+.tags-page .card { background: linear-gradient(180deg, #0a1628, #1e3a5f); border: 1px solid rgba(33,150,243,0.3); color: #e0f7fa; }
+.tags-page .card-title a { color: #64b5f6; }
+.tags-page .card-title a:hover { color: #ffd54f; }
+.tags-page .card-text { color: rgba(224,247,250,0.85); }
+.tags-page .text-muted { color: rgba(100,181,246,0.7) !important; }
+.tags-page p { color: #e0f7fa; }
+</style>
+<div class="w-9/10 max-w-7xl mx-auto px-4 tags-page">
+  <div class="row">
+    <div class="col-12">
+      <header class="mb-4">
+        <h1>Tag: {{ .Title }}</h1>
+        <p class="lead">Posts tagged with "{{ .Title }}"</p>
+      </header>
+      
+      {{- if .Pages }}
+      <div class="row">
+        {{- range .Pages }}
+        <div class="col-lg-6 mb-4">
+          <article class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"><a href="{{ .RelPermalink }}" class="text-decoration-none">{{ .Title }}</a></h5>
+              <div class="text-muted small mb-2">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+              </div>
+              {{- if .Summary }}
+              <p class="card-text">{{ .Summary }}</p>
+              {{- end }}
+            </div>
+          </article>
+        </div>
+        {{- end }}
+      </div>
+      {{- else }}
+      <p>No posts found with this tag.</p>
+      {{- end }}
+    </div>
+  </div>
+</div>
+{{ end }}

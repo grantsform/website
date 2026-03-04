@@ -1,0 +1,32 @@
+<style>
+.watching-card { background: rgba(15, 30, 50, 0.9) !important; transition: opacity 0.3s ease; opacity: 1; }
+.watching-link { color: #64b5f6; text-decoration: none; transition: color 140ms ease; }
+.watching-link:hover { color: #ffd54f; text-decoration: none; }
+details summary { cursor: pointer; color: #e0e0e0; display: flex; align-items: center; gap: 0.5em; }
+details summary .arrow { font-size: 1.2em; transition: transform 0.2s; display: inline-block; color: #64b5f6; }
+details[open] summary .arrow { transform: rotate(90deg); }
+</style>
+<section class="featured">
+  <h2>Contributor To</h2>
+  <div class="skills-card watching-card" style="font-size: 1.15em;">
+    <details open>
+      <summary><span class="arrow">&#9654;</span> These are some projects that have caught my attention and I'm contributing to or plan to very soon.</summary>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr style="border-bottom: 1px solid rgba(33,150,243,0.3);">
+            <th style="text-align: left; padding: 0.5rem; color: #ffd54f;">Project</th>
+            <th style="text-align: left; padding: 0.5rem; color: #ffd54f;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Site.Data.interests.contributing }}
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <td style="padding: 0.5rem;"><a href="{{ .url }}" class="watching-link" target="_blank">{{ .name }}</a></td>
+            <td style="padding: 0.5rem; color: #e0e0e0; word-wrap: break-word; overflow-wrap: break-word;">{{ .desc }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </details>
+  </div>
+</section>

@@ -1,0 +1,240 @@
+{{ define "main" }}
+<style>
+.tots-page { position: relative; z-index: 10; }
+.tots-page h1 { color: #ffd54f; }
+.tots-page .lead { color: #e0f7fa; }
+
+.tot-thread-header h3 { margin: 0 0 0.35rem 0; color: #ffd54f; font-size: 1.05rem; }
+.tot-thread-desc { color: rgba(224,240,255,0.6); margin: 0 0 0.6rem 0; }
+
+.tot-feed { max-width: 900px; margin: 0 auto; }
+
+.tot-thread-card {
+  background: linear-gradient(180deg, #0d2137, #1a3a5c);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e0f0ff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.tot-thread-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* In preview mode, only show the first tot-post */
+.tot-thread-card .tot-thread-posts .tot-post ~ .tot-post { display: none; }
+.tot-thread-card.expanded .tot-thread-posts .tot-post ~ .tot-post {
+  display: block;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(33,150,243,0.2);
+}
+
+.tot-expand-btn {
+  background: none;
+  border: 1px solid rgba(33,150,243,0.3);
+  color: #64b5f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tot-expand-btn:hover { background: rgba(33,150,243,0.15); color: #ffd54f; border-color: #ffd54f; }
+
+.tot-post-body {
+  color: #e0f0ff;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+.tot-post-body p { margin: 0 0 0.5rem 0; }
+.tot-post-body p:last-child { margin-bottom: 0; }
+
+.tot-date {
+  display: block;
+  color: rgba(100,181,246,0.7);
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.post-tag { background: rgba(33, 150, 243, 0.2); color: #64b5f6; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; text-decoration: none; transition: background 0.15s; }
+.post-tag:hover { background: rgba(33, 150, 243, 0.35); }
+
+.tot-gag { color: rgba(224,240,255,0.45); text-align: center; font-size: 0.9rem; margin: 0.35rem 0 0.6rem 0; }
+
+.tot-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(33,150,243,0.15);
+}
+.tot-thread-link {
+  color: #64b5f6;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+.tot-thread-link:hover { color: #ffd54f; }
+.tot-reply-count {
+  color: rgba(100,181,246,0.6);
+  font-size: 0.8rem;
+}
+.tot-permalink {
+  color: rgba(100,181,246,0.5);
+  font-size: 0.75rem;
+  text-decoration: none;
+  margin-left: auto;
+}
+.tot-permalink:hover { color: #ffd54f; }
+
+.tots-rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64b5f6;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+}
+.tots-rss-link:hover { color: #ffd54f; }
+</style>
+
+<div class="w-9/10 max-w-7xl mx-auto px-4 tots-page">
+  <header class="mb-4">
+    <h1>
+      <i class="fas fa-thought-bubble"></i> Tots
+      <a href="{{ "/tots/index.xml" | relURL }}" class="tots-rss-link" title="Tots RSS Feed">
+        <i class="fas fa-rss"></i> RSS
+      </a>
+    </h1>
+    <p class="lead">A stream of self-contained thoughts</p>
+  </header>
+
+  <div class="tot-feed">
+    {{/* Build a sortable collection keyed by last-tot date */}}
+    {{- $threads := where .Pages "Draft" false }}
+    {{- $sorted := slice }}
+    {{- range $threads }}
+      {{- $lastDate := partial "tot-last-date" .RawContent }}
+      {{- $sorted = $sorted | append (dict "page" . "lastDate" $lastDate) }}
+    {{- end }}
+    {{/* Sort descending by lastDate */}}
+    {{- $sorted = sort $sorted "lastDate" "desc" }}
+
+    {{/* Build a global tag list (unique, alphabetical) from these threads */}}
+    {{- $allTotsTags := slice }}
+    {{- range $sorted }}
+      {{- $p := .page }}
+      {{- /* body hashtags */ -}}
+      {{- range findRE `#[a-zA-Z][a-zA-Z0-9_]+` $p.RawContent }}
+        {{- $t := strings.TrimPrefix "#" . }}
+        {{- if not (in $allTotsTags $t) }}{{- $allTotsTags = $allTotsTags | append $t }}{{- end }}
+      {{- end }}
+      {{- /* front-matter tags */ -}}
+      {{- range $p.Params.tags | default (slice) }}
+        {{- if not (in $allTotsTags .) }}{{- $allTotsTags = $allTotsTags | append . }}{{- end }}
+      {{- end }}
+    {{- end }}
+    {{- $allTotsTags = sort $allTotsTags }}
+
+    {{/* Tag filter UI */}}
+    <div id="tots-tag-filter" style="margin-bottom:0.8rem;">
+      <button class="tag-filter-btn btn btn-sm" data-tag="__all__">All</button>
+      {{- range $allTotsTags }}
+        <button class="tag-filter-btn btn btn-sm" data-tag="{{ . | urlize }}">{{ . }}</button>
+      {{- end }}
+    </div>
+
+    {{- range $sorted }}
+      {{- $thread := .page }}
+      {{- /* compute tags for this thread and urlized variant for data attribute */ -}}
+      {{- $bodyTags := slice }}
+      {{- range findRE `#[a-zA-Z][a-zA-Z0-9_]+` $thread.RawContent }}
+        {{- $tg := strings.TrimPrefix "#" . }}
+        {{- $bodyTags = $bodyTags | append $tg }}
+      {{- end }}
+      {{- $fmTags := $thread.Params.tags | default (slice) }}
+      {{- $allTags := $fmTags }}
+      {{- range $bodyTags }}
+        {{- if not (in $allTags .) }}{{- $allTags = $allTags | append . }}{{- end }}
+      {{- end }}
+      {{- $allTags = sort $allTags }}
+      {{- $allTagsURL := slice }}
+      {{- range $allTags }}{{- $allTagsURL = $allTagsURL | append (. | urlize) }}{{- end }}
+
+      {{- $totCount := len (findRE `\{%\s*tot\s` $thread.RawContent) }}
+      {{- $replyCount := 0 }}
+      {{- if gt $totCount 1 }}{{- $replyCount = sub $totCount 1 }}{{- end }}
+
+      <article class="tot-thread-card" data-tags="{{ delimit $allTagsURL "," }}">
+        <div class="tot-thread-header">
+          <h3>{{ with $thread.Params.name }}{{ . }}{{ else }}{{ $thread.Title }}{{ end }}</h3>
+          {{ with $thread.Params.desc }}<p class="tot-thread-desc">{{ . }}</p>{{ end }}
+        </div>
+
+        {{- if $allTags }}
+        <div class="post-tags">
+          {{- range $allTags }}
+          <a href="{{ "/tots/?tag=" }}{{ . | urlize }}" class="post-tag">#{{ . }}</a>
+          {{- end }}
+        </div>
+          <div class="tot-gag"></div>
+        {{- end }}
+
+        {{ $thread.Content }}
+
+        <div class="tot-card-footer">
+          {{- if gt $replyCount 0 }}
+          <button class="tot-thread-link tot-expand-btn" onclick="var c=this.closest('article.tot-thread-card'); c.classList.toggle('expanded'); this.textContent = c.classList.contains('expanded') ? 'Hide thread ({{ add $replyCount 1 }})' : 'Show thread ({{ add $replyCount 1 }})';">
+            <i class="fas fa-comments"></i> Show thread ({{ add $replyCount 1 }})
+          </button>
+          <span class="tot-reply-count">{{ $replyCount }} more in thread</span>
+          {{- end }}
+          <a href="{{ $thread.RelPermalink }}" class="tot-permalink"><i class="fas fa-link"></i></a>
+        </div>
+      </article>
+    {{- end }}
+  
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const container = document.getElementById('tots-tag-filter');
+      if(!container) return;
+      const buttons = container.querySelectorAll('.tag-filter-btn');
+      function clearFilter(){
+        document.querySelectorAll('article.tot-thread-card').forEach(a=>a.style.display='block');
+        buttons.forEach(b=>b.classList.remove('active'));
+      }
+      function activateTag(tag){
+        buttons.forEach(b=>b.classList.remove('active'));
+        if(tag === '__all__'){ clearFilter(); return; }
+        const btn = Array.from(buttons).find(b=>b.dataset.tag===tag);
+        if(btn) btn.classList.add('active');
+        document.querySelectorAll('article.tot-thread-card').forEach(a=>{
+          const tags = a.dataset.tags ? a.dataset.tags.split(',') : [];
+          if(tags.includes(tag)) a.style.display='block'; else a.style.display='none';
+        });
+      }
+      container.addEventListener('click', function(e){
+        const btn = e.target.closest('.tag-filter-btn');
+        if(!btn) return;
+        const tag = btn.dataset.tag;
+        if(tag === '__all__') { clearFilter(); btn.classList.add('active'); return; }
+        const wasActive = btn.classList.contains('active');
+        if(wasActive){ clearFilter(); return; }
+        activateTag(tag);
+      });
+      // Auto-filter from URL ?tag= param
+      const urlTag = new URLSearchParams(window.location.search).get('tag');
+      if(urlTag) activateTag(urlTag);
+    });
+    </script>
+
+  </div>
+</div>
+
+{{ end }}

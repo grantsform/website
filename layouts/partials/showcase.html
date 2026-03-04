@@ -1,0 +1,401 @@
+{{- if .Site.Params.showcase }}
+{{- $items := .Site.Params.showcase.items }}
+{{- $title := .Site.Params.showcase.title | default "Showcase" }}
+{{- $autoplay := .Site.Params.showcase.autoplayMs | default 5000 }}
+{{- if $items }}
+
+<section id="showcase-carousel" class="showcase-carousel" style="margin:0 0 4rem 0;width:100%;">
+  <h2 style="color:#ffd54f;text-align:center;margin-bottom:1.5rem;">{{ $title }}</h2>
+
+  <div class="sc-viewport" data-autoplay="{{ $autoplay }}">
+    <!-- Slides -->
+    <div class="sc-track">
+      {{- range $i, $item := $items }}
+      <div class="sc-slide{{ if eq $i 0 }} sc-active{{ end }}" data-index="{{ $i }}">
+        <div class="sc-card">
+          {{- if $item.image }}
+          <div class="sc-img-wrap">
+            <img src="{{ $item.image }}" alt="{{ $item.title }}" loading="lazy" class="sc-img">
+            {{- if $item.badge }}
+            <span class="sc-badge">{{ $item.badge }}</span>
+            {{- end }}
+          </div>
+          {{- else }}
+          <div class="sc-img-wrap sc-noimg">
+            <div class="sc-noimg-text">No image</div>
+            {{- if $item.badge }}
+            <span class="sc-badge">{{ $item.badge }}</span>
+            {{- end }}
+          </div>
+          {{- end }}
+          <div class="sc-body">
+            <h3 class="sc-title">{{ $item.title }}</h3>
+            {{- if $item.subtitle }}
+            <p class="sc-subtitle">{{ $item.subtitle }}</p>
+            {{- end }}
+            {{- if $item.description }}
+            <p class="sc-desc">{{ $item.description }}</p>
+            {{- end }}
+            {{- if $item.url }}
+            <a href="{{ $item.url }}" class="sc-btn" target="_blank" rel="noopener noreferrer">
+              {{ $item.buttonText | default "Learn More" }} <i class="fa-solid fa-arrow-right" style="margin-left:0.4em;font-size:0.85em;"></i>
+            </a>
+            {{- end }}
+          </div>
+        </div>
+      </div>
+      {{- end }}
+    </div>
+
+    <!-- Prev / Next Arrows -->
+    <button class="sc-arrow sc-prev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="sc-arrow sc-next" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+
+    <!-- Indicator Dots -->
+    <div class="sc-dots">
+      {{- range $i, $item := $items }}
+      <button class="sc-dot{{ if eq $i 0 }} sc-dot-active{{ end }}" data-goto="{{ $i }}" aria-label="Go to slide {{ add $i 1 }}"></button>
+      {{- end }}
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="sc-progress-track">
+      <div class="sc-progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Slide Counter -->
+  <div class="sc-counter" style="text-align:center;margin-top:0.5rem;">
+    <span class="sc-counter-current">1</span> / <span class="sc-counter-total">{{ len $items }}</span>
+  </div>
+</section>
+
+<!-- ========== Showcase Carousel Styles ========== -->
+<style>
+/* Viewport / Container */
+.sc-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0d2137 0%, #1e3a5f 100%);
+  border: 1px solid rgba(33,150,243,0.25);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.45);
+}
+
+/* Track that holds all slides side-by-side */
+.sc-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Each slide */
+.sc-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* Card inside slide */
+.sc-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 320px;
+}
+
+/* Image side */
+.sc-img-wrap {
+  position: relative;
+  flex: 0 0 50%;
+  max-width: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,22,40,0.6);
+}
+.sc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+.sc-card:hover .sc-img { transform: scale(1.04); }
+
+/* placeholder when no image provided */
+.sc-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15,25,40,0.6);
+}
+.sc-noimg-text {
+  color: #90caf9;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sc-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  background: rgba(255,213,79,0.92);
+  color: #0a1628;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25em 0.75em;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Text body side */
+.sc-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.2rem 2.5rem;
+  gap: 0.6rem;
+}
+.sc-title {
+  color: #ffd54f !important;
+  font-size: 1.55rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  line-height: 1.25;
+}
+.sc-subtitle {
+  color: #90caf9;
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+.sc-desc {
+  color: #cfd8dc;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0.3rem 0 0 0;
+}
+
+/* CTA Button */
+.sc-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.9rem;
+  padding: 0.55em 1.4em;
+  border-radius: 8px;
+  background: rgba(255,213,79,0.15);
+  color: #ffd54f;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border: 1px solid rgba(255,213,79,0.35);
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  width: fit-content;
+}
+.sc-btn:hover {
+  background: #ffd54f;
+  color: #0a1628;
+  box-shadow: 0 0 14px rgba(255,213,79,0.4);
+  text-decoration: none;
+}
+
+/* ---- Arrows ---- */
+.sc-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 42px; height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(10,22,40,0.7);
+  color: #ffd54f;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,213,79,0.2);
+}
+.sc-arrow:hover {
+  background: rgba(255,213,79,0.2);
+  box-shadow: 0 0 12px rgba(255,213,79,0.3);
+}
+.sc-prev { left: 14px; }
+.sc-next { right: 14px; }
+
+/* ---- Dots ---- */
+.sc-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem 0 0.7rem 0;
+}
+.sc-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,213,79,0.45);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  padding: 0;
+}
+.sc-dot:hover { border-color: #ffd54f; transform: scale(1.2); }
+.sc-dot-active {
+  background: #ffd54f;
+  border-color: #ffd54f;
+  transform: scale(1.15);
+}
+
+/* ---- Progress Bar ---- */
+.sc-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+}
+.sc-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffd54f, #ffeb3b);
+  transition: width 0.15s linear;
+}
+
+/* ---- Counter ---- */
+.sc-counter {
+  color: #90caf9;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+}
+.sc-counter-current { color: #ffd54f; font-weight: 600; }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .sc-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .sc-img-wrap {
+    flex: none;
+    max-width: 100%;
+    height: 200px;
+  }
+  .sc-body {
+    padding: 1.4rem 1.3rem;
+  }
+  .sc-arrow { width: 36px; height: 36px; font-size: 0.95rem; }
+  .sc-prev { left: 8px; }
+  .sc-next { right: 8px; }
+  .sc-title { font-size: 1.25rem !important; }
+}
+</style>
+
+<!-- ========== Showcase Carousel Script ========== -->
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const viewport = document.querySelector('.sc-viewport');
+    if (!viewport) return;
+
+    const track    = viewport.querySelector('.sc-track');
+    const slides   = Array.from(viewport.querySelectorAll('.sc-slide'));
+    const dots     = Array.from(viewport.querySelectorAll('.sc-dot'));
+    const prevBtn  = viewport.querySelector('.sc-prev');
+    const nextBtn  = viewport.querySelector('.sc-next');
+    const bar      = viewport.querySelector('.sc-progress-bar');
+    const curEl    = document.querySelector('.sc-counter-current');
+    const autoMs   = parseInt(viewport.dataset.autoplay, 10) || 5000;
+    const total    = slides.length;
+
+    let current  = 0;
+    let timer    = null;
+    let paused   = false;
+    let progRAF  = null;
+    let progStart = null;
+
+    function goTo(idx, skipAnim) {
+      current = ((idx % total) + total) % total;
+      track.style.transition = skipAnim ? 'none' : 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+      track.style.transform  = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach(function(d,i){ d.classList.toggle('sc-dot-active', i === current); });
+      if (curEl) curEl.textContent = current + 1;
+      resetProgress();
+    }
+
+    function next(){ goTo(current + 1); }
+    function prev(){ goTo(current - 1); }
+
+    /* Progress bar animation */
+    function resetProgress(){
+      cancelAnimationFrame(progRAF);
+      bar.style.width = '0%';
+      progStart = null;
+      if (!paused) tickProgress();
+    }
+    function tickProgress(){
+      progRAF = requestAnimationFrame(function step(ts){
+        if (!progStart) progStart = ts;
+        const elapsed = ts - progStart;
+        const pct = Math.min((elapsed / autoMs) * 100, 100);
+        bar.style.width = pct + '%';
+        if (pct < 100) {
+          progRAF = requestAnimationFrame(step);
+        } else {
+          next();
+        }
+      });
+    }
+
+    /* Auto-play */
+    function startAuto(){ paused = false; resetProgress(); }
+    function stopAuto(){  paused = true;  cancelAnimationFrame(progRAF); }
+
+    viewport.addEventListener('mouseenter', stopAuto);
+    viewport.addEventListener('mouseleave', startAuto);
+
+    /* Arrows */
+    prevBtn.addEventListener('click', function(){ prev(); resetProgress(); });
+    nextBtn.addEventListener('click', function(){ next(); resetProgress(); });
+
+    /* Dots */
+    dots.forEach(function(dot){
+      dot.addEventListener('click', function(){ goTo(parseInt(dot.dataset.goto, 10)); });
+    });
+
+    /* Keyboard (when focused) */
+    viewport.setAttribute('tabindex', '0');
+    viewport.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft')  { prev(); resetProgress(); }
+      if (e.key === 'ArrowRight') { next(); resetProgress(); }
+    });
+
+    /* Touch / Swipe */
+    let touchX0 = null;
+    viewport.addEventListener('touchstart', function(e){ touchX0 = e.changedTouches[0].clientX; }, {passive:true});
+    viewport.addEventListener('touchend', function(e){
+      if (touchX0 === null) return;
+      const dx = e.changedTouches[0].clientX - touchX0;
+      if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); resetProgress(); }
+      touchX0 = null;
+    }, {passive:true});
+
+    /* Kick off */
+    goTo(0, true);
+    startAuto();
+  });
+})();
+</script>
+
+{{- end }}
+{{- end }}

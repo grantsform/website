@@ -1,0 +1,68 @@
+{{/* tot shortcode — a single post within a thread */}}
+{{- $dateStr := .Get "date" -}}
+{{- $date := time $dateStr -}}
+{{- $raw := .Inner -}}
+{{- $id := .Get "id" -}}
+{{- /* If no explicit id, allow a standalone line like `#intro` in the tot body to act as an id marker. */ -}}
+{{- if not $id }}
+  {{- $standalones := findRE `(?m)^[ \t]*#[A-Za-z][A-Za-z0-9_-]*[ \t]*$` $raw -}}
+  {{- if gt (len $standalones) 0 }}
+    {{- $line := index $standalones 0 -}}
+    {{- $line = strings.TrimSpace $line -}}
+    {{- $line = strings.TrimPrefix $line "#" -}}
+    {{- $id = $line -}}
+    {{- $raw = replaceRE `(?m)^[ \t]*#[A-Za-z][A-Za-z0-9_-]*[ \t]*$` "" $raw -}}
+  {{- end -}}
+{{- end -}}
+{{- $refsRaw := .Get "refs" | default "" -}}
+{{- $refs := slice -}}
+{{- if ne $refsRaw "" }}
+  {{- $refs = split (replaceRE "\\s+" "" $refsRaw) "," -}}
+{{- end -}}
+{{- /* render inner markdown to HTML then linkify hashtags */ -}}
+{{- $html := $raw | markdownify -}}
+{{- $tags := findRE "#[A-Za-z][A-Za-z0-9_]+" $raw -}}
+{{- range $tags }}
+  {{- $name := strings.TrimPrefix "#" . -}}
+  {{- $link := (printf "/tots/?tag=%s" ($name | urlize)) -}}
+  {{- $anchor := (printf "<a href=\"%s\" class=\"post-tag\">#%s</a>" $link $name) -}}
+  {{- $html = replace $html . $anchor -}}
+{{- end }}
+
+<div class="tot-post"{{ if $id }} id="{{ $id }}"{{ end }}>
+  <div class="tot-post-body">
+    {{ $html | safeHTML }}
+  </div>
+  {{- if gt (len $refs) 0 }}
+  <div class="tot-refs">
+    <span class="muted">References:</span>
+    {{- range $refs }}
+      {{- $r := . -}}
+      {{- if or (hasPrefix $r "/") (hasPrefix $r "http") -}}
+        <a href="{{ $r }}" class="post-tag">{{ $r }}</a>
+      {{- else -}}
+        {{- /* Try to find a page that defines this id (either as tot id= or standalone #id marker). If found, link to that page's permalink + fragment. */ -}}
+        {{- $found := "" -}}
+        {{- range $.Site.RegularPages -}}
+          {{- if eq $found "" -}}
+            {{- $p := . -}}
+            {{- $check1 := in $p.RawContent (printf "id=%s" $r) -}}
+            {{- $check2 := in $p.RawContent (printf "id=\"%s\"" $r) -}}
+            {{- $check3 := in $p.RawContent (printf "id='%s'" $r) -}}
+            {{- $m := findRE (printf "(?m)^[ \\t]*#%s[ \\t]*$" $r) $p.RawContent -}}
+            {{- if or $check1 $check2 $check3 (gt (len $m) 0) -}}
+              {{- $found = $p.Permalink -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if ne $found "" -}}
+          <a href="{{ $found }}#{{ $r }}" class="tot-ref-link" title="Permalink to tot {{ $r }}"><i class="fas fa-link"></i> {{ $r }}</a>
+        {{- else -}}
+          <a href="#{{ $r }}" class="tot-ref-link" title="Permalink to tot {{ $r }}"><i class="fas fa-link"></i> {{ $r }}</a>
+        {{- end -}}
+      {{- end -}}
+    {{- end }}
+  </div>
+  {{- end }}
+  <time class="tot-date" datetime="{{ $date.Format "2006-01-02T15:04:05" }}">{{ $date.Format "Jan 2, 2006 · 3:04 PM" }}</time>
+</div>

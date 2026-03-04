@@ -1,0 +1,48 @@
+[
+    {
+        "title": "Grant 'Canon Stoat Server",
+        "date": "2026-03-11",
+        "time": "00:00",
+        "url": "https://stoat.chat",
+        "category": "Social",
+        "color": "#8bc34a",
+        "description": "Initial version of the Grant 'Canon Stoat Server up and going."
+    },
+    {
+        "title": "Intro Video",
+        "date": "2026-03-14",
+        "time": "20:00",
+        "url": "#",
+        "category": "Video",
+        "color": "#e53935",
+        "description": "Initial intro-video, even if it's just demostream b-roll."
+    },
+    {
+        "title": "Struct Stream",
+        "time": "14:00",
+        "url": "#",
+        "category": "Stream",
+        "color": "#9c27b0",
+        "description": "Structuring things, on stream.",
+        "recurrence": {
+            "freq": "weekly",
+            "interval": 1,
+            "byDay": [
+                "Tue",
+                "Fri"
+            ],
+            "start": "2026-03-24",
+            "end": "2026-05-27"
+        }
+    },
+    {
+        "title": "Initial Github Setup",
+        "start": "2026-02-22",
+        "end": "2026-03-07",
+        "time": "00:00",
+        "url": "https://github.com/grantsform/",
+        "category": "Release",
+        "color": "#00bcd4",
+        "description": "Initial Pushes For A Bunch Of Stuff (ongoing work through the week)."
+    }
+]
