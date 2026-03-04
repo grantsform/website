@@ -64,9 +64,16 @@
     </div>
   </div>
 
-  <!-- Slide Counter -->
+  <!-- Slide Counter (desktop) -->
   <div class="sc-counter" style="text-align:center;margin-top:0.5rem;">
     <span class="sc-counter-current">1</span> / <span class="sc-counter-total">{{ len $items }}</span>
+  </div>
+
+  <!-- Mobile nav bar: [<] 1/4 [>] -->
+  <div class="sc-mobile-nav">
+    <button class="sc-mobile-prev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+    <span class="sc-mobile-counter"><span class="sc-counter-current-m">1</span> / <span class="sc-counter-total-m">{{ len $items }}</span></span>
+    <button class="sc-mobile-next" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
   </div>
 </section>
 
@@ -280,8 +287,38 @@
 }
 .sc-counter-current { color: #ffd54f; font-weight: 600; }
 
-/* ---- Responsive ---- */
+/* Mobile nav is hidden on desktop */
+.sc-mobile-nav { display: none; }
+
+/* ==========================================================
+   MOBILE: fade-based carousel (no translateX, no drift)
+   ========================================================== */
 @media (max-width: 768px) {
+  /* Stack all slides on top of each other */
+  .sc-track {
+    display: block !important;
+    transform: none !important;
+    transition: none !important;
+    position: relative;
+  }
+  .sc-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    pointer-events: none;
+  }
+  .sc-slide.sc-fade-active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    pointer-events: auto;
+  }
+
+  /* Card layout: vertical on mobile */
   .sc-card {
     flex-direction: column;
     min-height: auto;
@@ -289,15 +326,85 @@
   .sc-img-wrap {
     flex: none;
     max-width: 100%;
-    height: 200px;
+    height: 180px;
   }
   .sc-body {
-    padding: 1.4rem 1.3rem;
+    padding: 1rem 1.2rem;
   }
-  .sc-arrow { width: 36px; height: 36px; font-size: 0.95rem; }
-  .sc-prev { left: 8px; }
-  .sc-next { right: 8px; }
-  .sc-title { font-size: 1.25rem !important; }
+  .sc-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  .sc-title { font-size: 1.2rem !important; }
+
+  /* Viewport */
+  .sc-viewport {
+    border-radius: 10px;
+  }
+
+  /* Arrows: keep but smaller */
+  .sc-arrow { width: 34px; height: 34px; font-size: 0.9rem; }
+  .sc-prev { left: 6px; }
+  .sc-next { right: 6px; }
+
+  /* Dots: larger tap targets */
+  .sc-dots { gap: 8px; }
+  .sc-dot { width: 14px; height: 14px; border-width: 3px; }
+
+  /* Hide progress bar and counter on mobile */
+  .sc-progress-track,
+  .sc-counter { display: none; }
+
+  /* Hide overlay arrows on mobile — replaced by bottom nav */
+  .sc-arrow { display: none; }
+
+  /* Mobile bottom nav bar */
+  .sc-mobile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.6rem;
+  }
+  .sc-mobile-nav button {
+    width: 40px; height: 40px;
+    border: 2px solid rgba(255,213,79,0.4);
+    border-radius: 50%;
+    background: rgba(10,22,40,0.7);
+    color: #ffd54f;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .sc-mobile-nav button:hover,
+  .sc-mobile-nav button:active {
+    background: rgba(255,213,79,0.2);
+    border-color: #ffd54f;
+  }
+  .sc-mobile-counter {
+    color: #90caf9;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    min-width: 3em;
+    text-align: center;
+  }
+  .sc-mobile-counter .sc-counter-current-m {
+    color: #ffd54f;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 480px) {
+  .sc-img-wrap { height: 140px; }
+  .sc-title { font-size: 1.05rem !important; }
+  .sc-subtitle { font-size: 0.85rem; }
+  .sc-desc { font-size: 0.85rem; }
+  .sc-btn { padding: 0.6em 1em; font-size: 0.9rem; }
 }
 </style>
 
@@ -324,12 +431,37 @@
     let progRAF  = null;
     let progStart = null;
 
+    // detect mobile breakpoint (must match CSS @media threshold)
+    function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
+
     function goTo(idx, skipAnim) {
       current = ((idx % total) + total) % total;
-      track.style.transition = skipAnim ? 'none' : 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
-      track.style.transform  = 'translateX(-' + (current * 100) + '%)';
+
+      if (isMobile()) {
+        // MOBILE: fade transition — no translateX at all
+        track.style.transform = 'none';
+        track.style.transition = 'none';
+        slides.forEach(function(s, i) {
+          s.classList.toggle('sc-fade-active', i === current);
+        });
+      } else {
+        // DESKTOP: classic slide via translateX
+        track.style.transition = skipAnim ? 'none' : 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+        var offset = 0;
+        for (var i = 0; i < current; i++) {
+          offset += slides[i].getBoundingClientRect().width;
+        }
+        offset = Math.round(offset);
+        track.style.transform = 'translate3d(-' + offset + 'px,0,0)';
+        // clear any leftover fade classes
+        slides.forEach(function(s) { s.classList.remove('sc-fade-active'); });
+      }
+
       dots.forEach(function(d,i){ d.classList.toggle('sc-dot-active', i === current); });
       if (curEl) curEl.textContent = current + 1;
+      // update mobile counter too
+      var curElM = document.querySelector('.sc-counter-current-m');
+      if (curElM) curElM.textContent = current + 1;
       resetProgress();
     }
 
@@ -368,6 +500,12 @@
     prevBtn.addEventListener('click', function(){ prev(); resetProgress(); });
     nextBtn.addEventListener('click', function(){ next(); resetProgress(); });
 
+    /* Mobile nav buttons */
+    var mPrev = document.querySelector('.sc-mobile-prev');
+    var mNext = document.querySelector('.sc-mobile-next');
+    if (mPrev) mPrev.addEventListener('click', function(){ prev(); resetProgress(); });
+    if (mNext) mNext.addEventListener('click', function(){ next(); resetProgress(); });
+
     /* Dots */
     dots.forEach(function(dot){
       dot.addEventListener('click', function(){ goTo(parseInt(dot.dataset.goto, 10)); });
@@ -393,6 +531,16 @@
     /* Kick off */
     goTo(0, true);
     startAuto();
+
+    /* ensure slide stays centered when viewport resizes */
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      // debounce to avoid thrashing during continuous resize
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function(){
+        goTo(current, true);
+      }, 100);
+    });
   });
 })();
 </script>
