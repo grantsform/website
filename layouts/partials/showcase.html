@@ -352,9 +352,14 @@
   .sc-dots { gap: 8px; }
   .sc-dot { width: 14px; height: 14px; border-width: 3px; }
 
-  /* Hide progress bar and counter on mobile */
-  .sc-progress-track,
+  /* Hide desktop counter on mobile — replaced by mobile nav */
   .sc-counter { display: none; }
+
+  /* Progress bar on mobile: full width below viewport */
+  .sc-progress-track {
+    height: 3px;
+    border-radius: 0 0 10px 10px;
+  }
 
   /* Hide overlay arrows on mobile — replaced by bottom nav */
   .sc-arrow { display: none; }
